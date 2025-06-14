@@ -22,7 +22,7 @@ nodes:
   - hostname: "edge001"
     ipAddress: "10.40.0.101"
     installDiskSelector:
-      serial: "sda"
+      model: "Lexar SSD NQ100"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3
@@ -50,7 +50,7 @@ nodes:
   - hostname: "edge002"
     ipAddress: "10.40.0.102"
     installDiskSelector:
-      serial: "sda"
+      model: "Lexar SSD NQ100"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3
@@ -78,7 +78,7 @@ nodes:
   - hostname: "edge003"
     ipAddress: "10.40.0.103"
     installDiskSelector:
-      serial: "sda"
+      model: "Lexar SSD NQ100"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3

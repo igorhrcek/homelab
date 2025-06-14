@@ -8,7 +8,7 @@ kubernetesVersion: "${kubernetesVersion}"
 endpoint: https://10.40.0.10:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
-  - "10.40.0.10"
+  - &talosControlplaneVip "10.40.0.10"
 additionalMachineCertSans: *sans
 
 clusterPodNets: ["10.42.0.0/16"]
@@ -28,18 +28,25 @@ nodes:
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3
     controlPlane: true
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "58:47:ca:77:39:b1"
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: "58:47:ca:77:39:b1"
+        dhcp: true
+        vip:
+          ip: *talosControlplaneVip
         vlans:
-          - vlanId: 40
+          - vlanId: 1
+            dhcp: false
             addresses:
-              - "10.40.0.101/24"
+              - 10.10.0.101/24
             mtu: 1500
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.40.0.1"
-            vip:
-              ip: "10.40.0.10"
+          - vlanId: 20
+            dhcp: false
+            addresses:
+              - 10.20.0.101/24
+            mtu: 1500
   - hostname: "edge002"
     ipAddress: "10.40.0.102"
     installDiskSelector:
@@ -49,16 +56,25 @@ nodes:
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3
     controlPlane: false
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "58:47:ca:77:36:b5"
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: "58:47:ca:77:36:b5"
+        dhcp: true
+        vip:
+          ip: *talosControlplaneVip
         vlans:
-          - vlanId: 40
+          - vlanId: 1
+            dhcp: false
             addresses:
-              - "10.40.0.102/24"
+              - 10.10.0.102/24
             mtu: 1500
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.40.0.1"
+          - vlanId: 20
+            dhcp: false
+            addresses:
+              - 10.20.0.102/24
+            mtu: 1500
   - hostname: "edge003"
     ipAddress: "10.40.0.103"
     installDiskSelector:
@@ -68,16 +84,25 @@ nodes:
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3
     controlPlane: false
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "58:47:ca:7c:0e:61"
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: "58:47:ca:7c:0e:61"
+        dhcp: true
+        vip:
+          ip: *talosControlplaneVip
         vlans:
-          - vlanId: 40
+          - vlanId: 1
+            dhcp: false
             addresses:
-              - "10.40.0.103/24"
+              - 10.10.0.102/24
             mtu: 1500
-            routes:
-              - network: "0.0.0.0/0"
-                gateway: "10.40.0.1"
+          - vlanId: 20
+            dhcp: false
+            addresses:
+              - 10.20.0.102/24
+            mtu: 1500
 
 # Global patches
 patches:

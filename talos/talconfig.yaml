@@ -99,12 +99,12 @@ nodes:
           - vlanId: 1
             dhcp: false
             addresses:
-              - 10.10.0.102/24
+              - 10.10.0.103/24
             mtu: 1500
           - vlanId: 20
             dhcp: false
             addresses:
-              - 10.20.0.102/24
+              - 10.20.0.103/24
             mtu: 1500
 
 # Global patches

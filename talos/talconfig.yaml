@@ -33,6 +33,7 @@ nodes:
           mode: active-backup
           deviceSelectors:
             - hardwareAddr: "58:47:ca:77:39:b1"
+              driver: igc
         dhcp: true
         vip:
           ip: *talosControlplaneVip
@@ -54,13 +55,14 @@ nodes:
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3
-    controlPlane: false
+    controlPlane: true
     networkInterfaces:
       - interface: bond0
         bond:
           mode: active-backup
           deviceSelectors:
             - hardwareAddr: "58:47:ca:77:36:b5"
+              driver: igc
         dhcp: true
         vip:
           ip: *talosControlplaneVip
@@ -82,13 +84,14 @@ nodes:
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/0649a881d8a50c3e70b4ec4b8ca459559f7dd681a5c1587f4b3bca70f7f870f3
-    controlPlane: false
+    controlPlane: true
     networkInterfaces:
       - interface: bond0
         bond:
           mode: active-backup
           deviceSelectors:
             - hardwareAddr: "58:47:ca:7c:0e:61"
+              driver: igc
         dhcp: true
         vip:
           ip: *talosControlplaneVip
@@ -111,6 +114,7 @@ patches:
   - "@./patches/global/machine-network.yaml"
   - "@./patches/global/machine-sysctls.yaml"
   - "@./patches/global/machine-time.yaml"
+  - "@./patches/global/hostdns.yaml"
 
 # Controller patches
 controlPlane:

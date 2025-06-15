@@ -31,7 +31,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: rook-ceph
-    - name: snapshot-controller
   path: ./kubernetes/apps/rook-ceph/rook-ceph/cluster
   prune: true
   sourceRef:

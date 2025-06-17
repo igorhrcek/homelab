@@ -27,7 +27,7 @@ spec:
         hostnames:
           - grafana.hrcek.rs
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https
 

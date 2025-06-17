@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: vmetrics
+  name: victoriametrics
   namespace: monitoring
 spec:
   interval: 5m
@@ -78,25 +78,11 @@ spec:
       create: true
       annotations: {}
 
-    ## -- Create default rules for monitoring the cluster
     defaultRules:
       create: false
 
-      # -- Runbook url prefix for default rules
-      runbookUrl: https://runbooks.prometheus-operator.dev/runbooks
-
-      # -- Labels for default rules
-      labels: {}
-      # -- Annotations for default rules
-      annotations: {}
-
     alertmanager:
       enabled: true
-      annotations: {}
-      spec:
-        selectAllByDefault: true
-        externalURL: ""
-        routePrefix: /
       ingress:
         enabled: false
       monzoTemplate:
@@ -154,8 +140,6 @@ spec:
     vmalert:
       enabled: true
       remoteWriteVMAgent: false
-      # spec for VMAlert crd
-      # https://github.com/VictoriaMetrics/operator/blob/master/docs/api.MD#vmalertspec
       spec:
         selectAllByDefault: true
 
@@ -164,8 +148,6 @@ spec:
         enabled: false
     vmagent:
       enabled: true
-      # https://docs.victoriametrics.com/operator/api.html#vmagentremotewritespec
-      # defined spec will be added to the remoteWrite configuration of VMAgent
       # spec:
       #   inlineScrapeConfig: |
       #     - job_name: node-exporter

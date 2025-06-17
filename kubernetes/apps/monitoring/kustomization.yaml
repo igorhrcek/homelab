@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./prometheus-operator-crds/kustomization.yaml
+  - ./victoriametrics/kustomization.yaml

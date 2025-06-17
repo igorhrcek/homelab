@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./snapshot-controller/kustomization.yaml
+  - ./onepassword-connect/kustomization.yaml

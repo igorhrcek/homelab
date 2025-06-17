@@ -1,0 +1,18 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: onepassword-connect
+  namespace: security
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: connect
+      # renovate: registryUrl=https://1password.github.io/connect-helm-charts chart=connect
+      version: 1.17.0
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: onepassword
+        namespace: flux-system

@@ -5,3 +5,4 @@ resources:
   - ./namespace.yaml
   - ./prometheus-operator-crds/kustomization.yaml
   - ./victoriametrics/kustomization.yaml
+  - ./grafana/kustomization.yaml

@@ -1,0 +1,94 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: grafana
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    deploymentStrategy:
+      type: Recreate
+
+    route:
+      main:
+        enabled: true
+        hostnames:
+          - grafana.hrcek.rs
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+
+    persistence:
+      enabled: true
+      storageClassName: ceph-block
+      size: 5Gi
+
+    imageRenderer:
+      enabled: true
+
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
+        searchNamespace: monitoring
+        resource: configmap
+        labelValue: "1"
+      datasources:
+        enabled: true
+        label: grafana_datasource
+        searchNamespace: monitoring
+        resource: configmap
+        labelValue: "1"
+
+    grafana.ini:
+      log:
+        filters: rendering:debug
+      server:
+        root_url: https://grafana.hrcek.rs
+        enable_gzip: true
+      plugins:
+        allow_loading_unsigned_plugins: true
+        plugin_admin_enabled: true
+      query:
+        concurrent_query_limit: 10
+      analytics:
+        enabled: false
+        reporting_enabled: false
+        check_for_updates: false
+        check_for_plugin_updates: false
+      users:
+        viewers_can_edit: true
+        auto_assign_org_role: Editor
+      dashboards:
+        default_home_dashboard_path: /tmp/dashboards/dashboard-index.json
+    admin:
+      existingSecret: "grafana"
+      userKey: "GF_ADMIN_USER"
+      passwordKey: "GF_ADMIN_PASSWORD"
+
+    envFromSecret: grafana
+
+    plugins:
+      - yesoreyeram-infinity-datasource
+      - victoriametrics-logs-datasource
+
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+    annotations:
+      secret.reloader.stakater.com/reload: grafana

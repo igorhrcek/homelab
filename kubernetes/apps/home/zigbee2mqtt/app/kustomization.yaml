@@ -4,4 +4,4 @@ namespace: home
 resources:
   - ./secret.yaml
   - ./helmrelease.yaml
-  - ../security/volsync/app/template-pvc.yaml
+  - ../../../../templates/volsync

@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./vernemq/kustomization.yaml
-  # - ./zigbee2mqtt/kustomization.yaml
+  - ./zigbee2mqtt/kustomization.yaml

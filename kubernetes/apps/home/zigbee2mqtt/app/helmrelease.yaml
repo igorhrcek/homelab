@@ -89,7 +89,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: z2mqtt
+              - name: zigbee2mqtt
                 port: *port
 
     persistence:

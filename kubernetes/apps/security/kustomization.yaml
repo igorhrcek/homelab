@@ -6,3 +6,5 @@ resources:
   - ./snapshot-controller/kustomization.yaml
   - ./onepassword-connect/kustomization.yaml
   - ./external-secrets/kustomization.yaml
+  - ./volsync/kustomization.yaml
+  - ./r2/kustomization.yaml

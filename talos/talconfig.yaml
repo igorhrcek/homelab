@@ -115,6 +115,7 @@ patches:
   - "@./patches/global/machine-sysctls.yaml"
   - "@./patches/global/machine-time.yaml"
   - "@./patches/global/hostdns.yaml"
+  - "@./patches/global/machine-openebs.yaml"
 
 # Controller patches
 controlPlane:

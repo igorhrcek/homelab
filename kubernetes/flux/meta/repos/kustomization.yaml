@@ -7,3 +7,4 @@ resources:
   - ./onepassword.yaml
   - ./bjw-s.yaml
   - ./backube.yaml
+  - ./openebs.yaml

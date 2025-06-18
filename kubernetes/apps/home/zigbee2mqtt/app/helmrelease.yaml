@@ -94,5 +94,4 @@ spec:
 
     persistence:
       data:
-        enabled: true
-        size: 5Gi
+        existingClaim: z2mqtt-config

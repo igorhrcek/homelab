@@ -23,3 +23,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CLAIM: z2mqtt-config
+      VOLSYNC_CAPACITY: 2Gi

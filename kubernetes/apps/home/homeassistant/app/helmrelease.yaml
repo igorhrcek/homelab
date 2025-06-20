@@ -1,0 +1,159 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homeassistant
+  namespace: home
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+
+    controllers:
+      homeassistant:
+        annotations:
+          configmap.reloader.stakater.com/reload: "hass-config"
+          secret.reloader.stakater.com/reload: "homeassistant-secrets"
+
+        # pod:
+        #   annotations:
+        #     k8s.v1.cni.cncf.io/networks: |
+        #       [{
+        #         "name":"multus-host",
+        #         "namespace": "network",
+        #         "ips": ["10.5.0.205/24"],
+        #         "mac": "dc:de:70:dd:f4:9e"
+        #       }]
+
+        replicas: 1
+
+        containers:
+          app:
+            image:
+              repository: homeassistant/home-assistant
+              tag: 2025.7.0.dev202506200239
+            env:
+              TZ: "Europe/Belgrade"
+            # envFrom:
+            #   - secretRef:
+            #       name: homeassistant-secrets
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.100.3@sha256:c5b7ec231b24f26ecee243e8d9f9df57af906d03c9c8238efd893217c9f1f725
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.code-server
+              - --extensions-dir
+              - /config/.code-server
+              - --port
+              - "12321"
+              - /config
+            env:
+              HASS_SERVER: http://localhost:8123
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+    service:
+      app:
+        controller: &app homeassistant
+        ports:
+          http:
+            port: &port 8123
+          mdns-tcp:
+            enabled: true
+            port: 5353
+            protocol: TCP
+            targetPort: 5353
+          mdns-udp:
+            enabled: true
+            port: 5353
+            protocol: UDP
+            targetPort: 5353
+          code-server:
+            port: 12321
+
+    route:
+      app:
+        hostnames:
+          - hass.hrcek.rs
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+      code-server:
+        hostnames:
+          - hass-code.hrcek.rs
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: 12321
+
+    persistence:
+      config:
+        existingClaim: home-assistant-config
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      tts:
+        type: emptyDir
+        globalMounts:
+          - path: /config/tts
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+    # serviceMonitor:
+    #   homeassistant:
+    #     serviceName: homeassistant
+    #     endpoints:
+    #       - port: http
+    #         scheme: http
+    #         path: /api/prometheus
+    #         interval: 30s
+    #         scrapeTimeout: 10s
+    #         bearerTokenSecret:
+    #           name: homeassistant-secrets
+    #           key: HASS_PROMETHEUS_TOKEN

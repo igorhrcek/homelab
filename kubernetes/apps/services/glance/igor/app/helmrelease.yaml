@@ -21,6 +21,7 @@ spec:
   values:
     controllers:
       dashboardigor:
+        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
 

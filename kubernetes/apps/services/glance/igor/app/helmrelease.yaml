@@ -55,7 +55,7 @@ spec:
     route:
       app:
         hostnames:
-          - dashboard.hrcek.rs
+          - dash.hrcek.rs
         parentRefs:
           - name: external
             namespace: kube-system

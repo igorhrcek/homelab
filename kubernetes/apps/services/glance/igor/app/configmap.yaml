@@ -8,6 +8,23 @@ data:
     pages:
       - name: Home
         columns:
+          - size: full
+            widgets:
+              - type: search
+                search-engine: google
+                bangs:
+                  - title: YouTube
+                    shortcut: "!yt"
+                    url: https://www.youtube.com/results?search_query={QUERY}
+
+          - size: full
+            widgets:
+              - type: bookmarks
+                groups:
+                  - links:
+                      - title: Gmail
+                        url: https://mail.google.com/mail/u/0/
+
           - size: small
             widgets:
               - type: calendar

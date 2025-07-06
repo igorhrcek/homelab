@@ -27,6 +27,7 @@ spec:
           app:
             image:
               repository: glanceapp/glance
+              tag: v0.8.4
             probes:
               liveness:
                 enabled: false

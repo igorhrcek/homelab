@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/services/glance/igor
+  path: ./kubernetes/apps/services/glance/igor/app
   prune: true
   sourceRef:
     kind: GitRepository

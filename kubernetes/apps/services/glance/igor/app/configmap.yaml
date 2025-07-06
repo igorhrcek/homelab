@@ -6,50 +6,15 @@ metadata:
 data:
   glance.yml: |
     theme:
-      background-color: 229 19 23
+      background-color: 240 21 15
       contrast-multiplier: 1.2
-      primary-color: 222 74 74
-      positive-color: 96 44 68
-      negative-color: 359 68 71
+      primary-color: 217 92 83
+      positive-color: 115 54 76
+      negative-color: 347 70 65
 
     pages:
       - name: Home
         columns:
-          - size: full
-            widgets:
-              - type: search
-                search-engine: google
-                bangs:
-                  - title: YouTube
-                    shortcut: "!yt"
-                    url: https://www.youtube.com/results?search_query={QUERY}
-
-              - type: bookmarks
-                groups:
-                  - links:
-                      - title: Gmail
-                        url: https://mail.google.com/mail/u/0/
-
-              - type: group
-                widgets:
-                  - type: hacker-news
-                  - type: lobsters
-                  - type: videos
-                    channels:
-                      - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
-                      - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
-                      - UCsBjURrPoezykLs9EqgamOA # Fireship
-                      - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
-                      - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
-              - type: group
-                widgets:
-                  - type: reddit
-                    subreddit: technology
-                    show-thumbnails: true
-                  - type: reddit
-                    subreddit: selfhosted
-                    show-thumbnails: true
-
           - size: small
             widgets:
               - type: calendar
@@ -68,19 +33,60 @@ data:
                   - url: https://samwho.dev/rss.xml
                   - url: https://ishadeed.com/feed.xml
                     title: Ahmad Shadeed
-              - type: twitch-channels
-                channels:
-                  - theprimeagen
-                  - j_blow
-                  - piratesoftware
-                  - cohhcarnage
-                  - christitustech
-                  - EJ_SA
+
+          - size: full
+            widgets:
+              - type: search
+                search-engine: google
+                bangs:
+                  - title: YouTube
+                    shortcut: "!yt"
+                    url: https://www.youtube.com/results?search_query={QUERY}
+
+              - type: bookmarks
+                groups:
+                  - links:
+                      - title: Ars Technica
+                        url: https://arstechnica.com/
+                      - title: Hacker News
+                        url: https://news.ycombinator.com/
+                      - title: Benchmark
+                        url: https://forum.benchmark.rs/
+                      - title: Garaža
+                        url: https://forum.garaza.rs/
+
+              - type: group
+                widgets:
+                  - type: hacker-news
+                  - type: lobsters
+                  - type: videos
+                    channels:
+                      - UCR-DXc1voovS8nhAvccRZhg # Jeff Geerling
+                      - UCsBjURrPoezykLs9EqgamOA # Fireship
+                      - UCBJycsmduvYEL83R_U4JriQ # Marques Brownlee
+                      - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+              - type: group
+                widgets:
+                  - type: reddit
+                    subreddit: kubernetes
+                    show-thumbnails: true
+                  - type: reddit
+                    subreddit: technology
+                    show-thumbnails: true
+                  - type: reddit
+                    subreddit: formula1
+                    show-thumbnails: true
+                  - type: reddit
+                    subreddit: serbia
+                    show-thumbnails: true
+                  - type: reddit
+                    subreddit: wordpress
+                    show-thumbnails: true
 
           - size: small
             widgets:
               - type: weather
-                location: London, United Kingdom
+                location: Belgrade, Serbia
                 units: metric
                 hour-format: 12h
               - type: markets
@@ -95,10 +101,3 @@ data:
                     name: Apple
                   - symbol: MSFT
                     name: Microsoft
-              - type: releases
-                cache: 1d
-                repositories:
-                  - glanceapp/glance
-                  - go-gitea/gitea
-                  - immich-app/immich
-                  - syncthing/syncthing

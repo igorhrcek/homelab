@@ -20,7 +20,10 @@ spec:
       retries: 3
   values:
     controllers:
-      dashboard-igor:
+      dashboardigor:
+        annotations:
+          configmap.reloader.stakater.com/reload: "dashboard-igor-configuration"
+
         replicas: 1
 
         containers:
@@ -38,7 +41,7 @@ spec:
 
     service:
       app:
-        controller: &app dashboard-igor
+        controller: &app dashboardigor
         ports:
           http:
             port: &port 8080

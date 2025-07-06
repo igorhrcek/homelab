@@ -22,7 +22,7 @@ spec:
     controllers:
       dashboardigor:
         annotations:
-          configmap.reloader.stakater.com/reload: "dashboard-igor-configuration"
+          reloader.stakater.com/auto: "true"
 
         replicas: 1
 

@@ -1,0 +1,98 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nzbget
+  namespace: apps
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      nzbget:
+        strategy: RollingUpdate
+
+        replicas: 1
+
+        containers:
+          app:
+            image:
+              repository: nzbgetcom/nzbget
+              tag: latest
+            envFrom:
+              - secretRef:
+                  name: nzbget-secret
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+
+    service:
+      app:
+        controller: &app nzbget
+        ports:
+          http:
+            port: &port 8080
+
+    route:
+      app:
+        hostnames:
+          - nzbget.hrcek.rs
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+
+    persistence:
+      config:
+        existingClaim: nzbget-config
+      media:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: "10.10.0.2"
+            path: "/var/nfs/shared/Media"
+        globalMounts:
+          - path: "/media"
+      temp:
+        type: emptyDir
+        advancedMounts:
+          sabnzbd:
+            app:
+              - path: /tmp
+      ephemeral:
+        type: custom
+        volumeSpec:
+          ephemeral:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                storageClassName: "openebs-hostpath"
+                resources:
+                  requests:
+                    storage: 100Gi
+        advancedMounts:
+          sabnzbd:
+            app:
+              - path: /incomplete
+                subPath: incomplete

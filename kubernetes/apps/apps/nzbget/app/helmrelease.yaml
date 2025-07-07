@@ -76,7 +76,7 @@ spec:
       temp:
         type: emptyDir
         advancedMounts:
-          sabnzbd:
+          nzbget:
             app:
               - path: /tmp
       ephemeral:
@@ -92,7 +92,7 @@ spec:
                   requests:
                     storage: 100Gi
         advancedMounts:
-          sabnzbd:
+          nzbget:
             app:
               - path: /incomplete
                 subPath: incomplete

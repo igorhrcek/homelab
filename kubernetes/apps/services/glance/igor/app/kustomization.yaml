@@ -5,4 +5,4 @@ kind: Kustomization
 namespace: services
 resources:
   - ./helmrelease.yaml
-  - ./configmap.yaml
+  - ./configmap.sops.yaml

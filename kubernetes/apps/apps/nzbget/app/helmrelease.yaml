@@ -64,15 +64,15 @@ spec:
     persistence:
       config:
         existingClaim: nzbget-config
-      media:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "10.10.0.2"
-            path: "/var/nfs/shared/Media"
-        globalMounts:
-          - path: "/media"
+      # media:
+      #   enabled: true
+      #   type: custom
+      #   volumeSpec:
+      #     nfs:
+      #       server: "10.10.0.2"
+      #       path: "/var/nfs/shared/Media"
+      #   globalMounts:
+      #     - path: "/media"
       temp:
         type: emptyDir
         advancedMounts:

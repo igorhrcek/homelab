@@ -6,4 +6,4 @@ namespace: apps
 resources:
   - ./namespace.yaml
   - ../../components/common/sops
-  - ./glance/igor/kustomization.yaml
+  # - ./glance/igor/kustomization.yaml

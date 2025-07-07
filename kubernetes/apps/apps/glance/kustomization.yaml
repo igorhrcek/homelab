@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app glance-igor
+  name: &app glance
   namespace: flux-system
 spec:
   targetNamespace: apps
@@ -14,7 +14,7 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
-  path: ./kubernetes/apps/apps/glance/igor/app
+  path: ./kubernetes/apps/apps/glance/app
   prune: true
   sourceRef:
     kind: GitRepository

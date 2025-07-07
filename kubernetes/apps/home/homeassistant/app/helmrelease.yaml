@@ -52,9 +52,9 @@ spec:
               tag: 2025.7.0.dev202506200239
             env:
               TZ: "Europe/Belgrade"
-            # envFrom:
-            #   - secretRef:
-            #       name: homeassistant-secrets
+            envFrom:
+              - secretRef:
+                  name: homeassistant-secrets
             probes:
               liveness:
                 enabled: false

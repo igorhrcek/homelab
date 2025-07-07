@@ -42,7 +42,7 @@ spec:
 
     service:
       app:
-        controller: &app dashboardigor
+        controller: &app dashboard-igor
         ports:
           http:
             port: &port 8080

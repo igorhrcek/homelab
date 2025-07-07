@@ -5,4 +5,4 @@ kind: Kustomization
 namespace: services
 resources:
   - ./namespace.yaml
-  # - ./glance/igor/kustomization.yaml
+  - ./glance/igor/kustomization.yaml

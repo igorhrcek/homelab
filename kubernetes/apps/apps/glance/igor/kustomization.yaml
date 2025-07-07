@@ -6,7 +6,7 @@ metadata:
   name: &app glance-igor
   namespace: flux-system
 spec:
-  targetNamespace: services
+  targetNamespace: apps
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -14,7 +14,7 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
-  path: ./kubernetes/apps/services/glance/igor/app
+  path: ./kubernetes/apps/apps/glance/igor/app
   prune: true
   sourceRef:
     kind: GitRepository

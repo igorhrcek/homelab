@@ -48,6 +48,8 @@ spec:
     service:
       app:
         controller: &app plex
+        type: LoadBalancer
+        externalTrafficPolicy: Cluster
         ports:
           http:
             port: &port 32400

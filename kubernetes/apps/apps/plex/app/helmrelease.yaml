@@ -38,11 +38,11 @@ spec:
               PLEX_ADVERTISE_URL: https://plex.hrcek.rs:443
             resources:
               requests:
-                gpu.intel.com/i915: 1
+                # gpu.intel.com/i915: 1
                 cpu: 200m
                 memory: 256Mi
               limits:
-                gpu.intel.com/i915: 1
+                # gpu.intel.com/i915: 1
                 memory: 4096Mi
 
     service:

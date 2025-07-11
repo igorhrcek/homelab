@@ -10,3 +10,6 @@ resources:
   - ./flame/kustomization.yaml
   - ./nzbget/kustomization.yaml
   - ./radarr/kustomization.yaml
+  - ./sonarr/kustomization.yaml
+  - ./qbittorrent/kustomization.yaml
+  - ./plex/kustomization.yaml

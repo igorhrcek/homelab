@@ -9,3 +9,4 @@ resources:
   - ./glance/kustomization.yaml
   - ./flame/kustomization.yaml
   - ./nzbget/kustomization.yaml
+  - ./radarr/kustomization.yaml

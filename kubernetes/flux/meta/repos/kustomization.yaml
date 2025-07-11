@@ -8,3 +8,4 @@ resources:
   - ./bjw-s.yaml
   - ./backube.yaml
   - ./openebs.yaml
+  - ./node-feature-discovery.yaml

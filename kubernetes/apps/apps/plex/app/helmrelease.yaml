@@ -50,6 +50,8 @@ spec:
         controller: &app plex
         type: LoadBalancer
         externalTrafficPolicy: Cluster
+        annotations:
+          lbipam.cilium.io/ips: "10.40.0.5"
         ports:
           http:
             port: &port 32400

@@ -35,7 +35,7 @@ spec:
               TZ: "Europe/Belgrade"
               PLEX_NO_AUTH_NETWORKS: 10.0.0.0/8
               VERSION: "docker"
-              PLEX_ADVERTISE_URL: https://plex.hrcek.rs:443
+              PLEX_ADVERTISE_URL: https://plex.hrcek.rs:443,https://10.40.0.5:32400
             resources:
               requests:
                 gpu.intel.com/i915: 1

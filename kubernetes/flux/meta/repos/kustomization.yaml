@@ -9,4 +9,4 @@ resources:
   - ./backube.yaml
   - ./openebs.yaml
   - ./node-feature-discovery.yaml
-  # - ./mariadb.yaml
+  - ./mariadb.yaml

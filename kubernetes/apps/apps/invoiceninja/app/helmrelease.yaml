@@ -61,20 +61,20 @@ spec:
           invoiceninja:
             app:
               - path: /tmp
+      public:
+        enabled: true
+        type: pvc
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        storageClass: openebs-hostpath
+        globalMounts:
+          - path: /var/www/html/public
 
-    # persistence:
-    #   storage:
-    #     enabled: true
-    #     type: custom
-    #     volumeSpec:
-    #       ephemeral:
-    #         volumeClaimTemplate:
-    #           spec:
-    #             accessModes:
-    #               - ReadWriteOnce
-    #             storageClassName: "openebs-hostpath"
-    #             resources:
-    #               requests:
-    #                 storage: 10Gi
-    #     globalMounts:
-    #       - path: "/var/app/public"
+      storage:
+        enabled: true
+        type: pvc
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        storageClass: openebs-hostpath
+        globalMounts:
+          - path: /var/www/html/storage

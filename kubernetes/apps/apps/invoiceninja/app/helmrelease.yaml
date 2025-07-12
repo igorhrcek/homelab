@@ -63,12 +63,6 @@ spec:
                 port: *port
 
     persistence:
-      temp:
-        type: emptyDir
-        advancedMounts:
-          invoiceninja:
-            app:
-              - path: /tmp
       public:
         enabled: true
         type: persistentVolumeClaim

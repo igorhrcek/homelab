@@ -48,6 +48,8 @@ spec:
         controller: &app invoiceninja
         type: LoadBalancer
         externalTrafficPolicy: Cluster
+        annotations:
+          lbipam.cilium.io/ips: "10.40.0.10"
         ports:
           http:
             port: &port 8000

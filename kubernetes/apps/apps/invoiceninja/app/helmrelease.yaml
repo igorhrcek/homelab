@@ -54,6 +54,14 @@ spec:
               - name: *app
                 port: *port
 
+    persistence:
+      temp:
+        type: emptyDir
+        advancedMounts:
+          invoiceninja:
+            app:
+              - path: /tmp
+
     # persistence:
     #   storage:
     #     enabled: true

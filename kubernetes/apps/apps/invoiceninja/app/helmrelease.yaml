@@ -37,12 +37,15 @@ spec:
               - secretRef:
                   name: invoiceninja-secret
 
+          nginx:
+            image: nginx:alpine
+
     service:
       app:
         controller: &app invoiceninja
         ports:
           http:
-            port: &port 9000
+            port: &port 80
 
     route:
       app:
@@ -81,3 +84,14 @@ spec:
         storageClass: openebs-hostpath
         globalMounts:
           - path: /var/www/html/storage
+
+      config:
+        enabled: true
+        type: configMap
+        name: invoiceninja-nginx-config
+        advancedMounts:
+          invoiceninja:
+            nginx:
+              - path: /etc/nginx/conf.d/default.conf
+                readOnly: true
+                subPath: default.conf

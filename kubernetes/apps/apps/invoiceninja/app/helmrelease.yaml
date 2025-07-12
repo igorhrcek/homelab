@@ -23,6 +23,9 @@ spec:
       invoiceninja:
         strategy: RollingUpdate
 
+        annotations:
+          secret.reloader.stakater.com/reload: "invoiceninja-secret"
+
         replicas: 1
 
         containers:
@@ -39,7 +42,7 @@ spec:
         controller: &app invoiceninja
         ports:
           http:
-            port: &port 9000
+            port: &port 80
 
     route:
       app:

@@ -6,7 +6,7 @@ metadata:
 data:
   default.conf: |
     server {
-        listen 80 default_server;
+        listen 8000 default_server;
         server_name _;
         index index.php index.html;
         root /var/www/html/public;

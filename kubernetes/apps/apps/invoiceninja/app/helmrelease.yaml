@@ -38,7 +38,9 @@ spec:
                   name: invoiceninja-secret
 
           nginx:
-            image: nginx:alpine
+            image:
+              repository: nginx
+              tag: alpine
 
     service:
       app:

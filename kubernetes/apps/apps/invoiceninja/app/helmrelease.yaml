@@ -54,19 +54,19 @@ spec:
               - name: *app
                 port: *port
 
-    persistence:
-      storage:
-        enabled: true
-        type: custom
-        volumeSpec:
-          ephemeral:
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                storageClassName: "openebs-hostpath"
-                resources:
-                  requests:
-                    storage: 10Gi
-        globalMounts:
-          - path: "/var/app/public"
+    # persistence:
+    #   storage:
+    #     enabled: true
+    #     type: custom
+    #     volumeSpec:
+    #       ephemeral:
+    #         volumeClaimTemplate:
+    #           spec:
+    #             accessModes:
+    #               - ReadWriteOnce
+    #             storageClassName: "openebs-hostpath"
+    #             resources:
+    #               requests:
+    #                 storage: 10Gi
+    #     globalMounts:
+    #       - path: "/var/app/public"

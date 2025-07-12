@@ -3,8 +3,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: mariadb-operator
+  name: mariadb
   namespace: flux-system
 spec:
   interval: 5m
-  url: https://mariadb-operator.github.io/mariadb-operator
+  url: https://helm.mariadb.com/mariadb-operator

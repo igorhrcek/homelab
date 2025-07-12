@@ -63,7 +63,7 @@ spec:
               - path: /tmp
       public:
         enabled: true
-        type: pvc
+        type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 10Gi
         storageClass: openebs-hostpath
@@ -72,7 +72,7 @@ spec:
 
       storage:
         enabled: true
-        type: pvc
+        type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 10Gi
         storageClass: openebs-hostpath

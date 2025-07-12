@@ -75,8 +75,13 @@ spec:
         accessMode: ReadWriteOnce
         size: 10Gi
         storageClass: openebs-hostpath
-        globalMounts:
-          - path: /var/www/html/public
+        advancedMounts:
+          invoiceninja:
+            app:
+              - path: /var/www/html/public
+            nginx:
+              - path: /var/www/html/public
+                readOnly: true
 
       storage:
         enabled: true
@@ -84,8 +89,13 @@ spec:
         accessMode: ReadWriteOnce
         size: 10Gi
         storageClass: openebs-hostpath
-        globalMounts:
-          - path: /var/www/html/storage
+        advancedMounts:
+          invoiceninja:
+            app:
+              - path: /var/www/html/storage
+            nginx:
+              - path: /var/www/html/storage
+                readOnly: true
 
       config:
         enabled: true

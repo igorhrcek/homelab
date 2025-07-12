@@ -46,6 +46,8 @@ spec:
     service:
       app:
         controller: &app invoiceninja
+        type: LoadBalancer
+        externalTrafficPolicy: Cluster
         ports:
           http:
             port: &port 8000

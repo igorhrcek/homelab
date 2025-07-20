@@ -73,9 +73,9 @@ spec:
           - name: "edge002"
             devices:
               - name: "/dev/nvme0n1"
-          - name: "edge003"
-            devices:
-              - name: "/dev/nvme0n1"
+          # - name: "edge003"
+          #   devices:
+          #     - name: "/dev/nvme0n1"
     cephBlockPools:
       - name: ceph-blockpool
         spec:
@@ -109,11 +109,11 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 3
+              size: 2
           dataPools:
             - failureDomain: host
               replicated:
-                size: 3
+                size: 2
               name: data0
           metadataServer:
             activeCount: 1

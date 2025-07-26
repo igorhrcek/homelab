@@ -34,6 +34,9 @@ spec:
             enabled: true
       mon:
         count: 2
+      healthCheck:
+        clusterDisruption:
+          disabled: true
       network:
         provider: host
         connections:

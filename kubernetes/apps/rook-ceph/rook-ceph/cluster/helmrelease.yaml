@@ -32,6 +32,8 @@ spec:
         modules:
           - name: pg_autoscaler
             enabled: true
+      mon:
+        count: 2
       network:
         provider: host
         connections:

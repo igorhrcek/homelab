@@ -34,8 +34,6 @@ spec:
             enabled: true
       mon:
         count: 2
-      cleanupPolicy:
-        confirmation: "yes-really-destroy-data"
       network:
         provider: host
         connections:

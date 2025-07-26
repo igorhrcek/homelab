@@ -7,4 +7,4 @@ resources:
   - ./onepassword-connect/kustomization.yaml
   - ./external-secrets/kustomization.yaml
   - ./volsync/kustomization.yaml
-  # - ./atuin/kustomization.yaml
+  - ./atuin/kustomization.yaml

@@ -5,10 +5,10 @@ clusterName: kubernetes
 talosVersion: "${talosVersion}"
 kubernetesVersion: "${kubernetesVersion}"
 
-endpoint: https://10.40.0.10:6443
+endpoint: https://10.40.0.20:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
-  - &talosControlplaneVip "10.40.0.10"
+  - &talosControlplaneVip "10.40.0.20"
 additionalMachineCertSans: *sans
 
 clusterPodNets: ["10.42.0.0/16"]

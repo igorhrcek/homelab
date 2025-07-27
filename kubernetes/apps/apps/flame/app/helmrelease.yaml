@@ -64,5 +64,9 @@ spec:
                 port: *port
 
     persistence:
-      config:
+      data:
         existingClaim: flame-config
+        advancedMounts:
+          flame:
+            app:
+              - path: /app/data

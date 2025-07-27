@@ -112,7 +112,7 @@ nodes:
         bond:
           mode: active-backup
           deviceSelectors:
-            - hardwareAddr: "58:47:ca:7c:0e:61"
+            - hardwareAddr: "38:05:25:31:13:b6"
               driver: igc
         dhcp: true
         vip:

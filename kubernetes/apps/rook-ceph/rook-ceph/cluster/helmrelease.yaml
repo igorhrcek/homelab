@@ -32,8 +32,6 @@ spec:
         modules:
           - name: pg_autoscaler
             enabled: true
-      mon:
-        count: 2
       healthCheck:
         clusterDisruption:
           disabled: true
@@ -78,9 +76,9 @@ spec:
           - name: "edge002"
             devices:
               - name: "/dev/nvme0n1"
-          # - name: "edge003"
-          #   devices:
-          #     - name: "/dev/nvme0n1"
+          - name: "edge003"
+            devices:
+              - name: "/dev/nvme0n1"
     cephBlockPools:
       - name: ceph-blockpool
         spec:
@@ -114,11 +112,11 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 2
+              size: 3
           dataPools:
             - failureDomain: host
               replicated:
-                size: 2
+                size: 3
               name: data0
           metadataServer:
             activeCount: 1

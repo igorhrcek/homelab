@@ -44,10 +44,10 @@ spec:
               ATUIN_DB_URI: sqlite:///config/atuin.db
               ATUIN_TLS__ENABLE: "false"
             args: ["server", "start"]
-            # securityContext:
-            #   allowPrivilegeEscalation: false
-            #   readOnlyRootFilesystem: true
-            #   capabilities: { drop: ["ALL"] }
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m

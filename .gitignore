@@ -21,3 +21,4 @@ bin/
 lib/
 .DS_Store
 Thumbs.db
+.direnv/

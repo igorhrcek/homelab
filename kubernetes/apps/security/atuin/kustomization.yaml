@@ -20,5 +20,3 @@ spec:
       APP: *app
       VOLSYNC_CLAIM: atuin-config
       VOLSYNC_CAPACITY: 10Gi
-      APP_UID: "1000"
-      APP_GID: "1000"

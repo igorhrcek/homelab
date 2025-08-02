@@ -102,11 +102,8 @@ tasks:
     silent: true
 
   generate-alerts:
-    desc: Convert alert files to VictoriaMetrics VMRule resources and generate kustomization.yaml
-    vars:
-      ALERTS_DIR: alerts
-      OUTPUT_DIR: kubernetes/apps/monitoring/victoriametrics/alerts
+    desc: Convert alert files to VictoriaMetrics VMRule resources
     cmds:
-      # Run the Python conversion script
-      - python3 .taskfiles/monitoring/convert_alerts.py --input-dir {{.ALERTS_DIR}} --output-dir {{.OUTPUT_DIR}} --clean
+      - python3 .taskfiles/monitoring/convert_alerts.py
     silent: true
+

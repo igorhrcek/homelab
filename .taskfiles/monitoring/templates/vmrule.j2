@@ -1,0 +1,7 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: {{ name }}
+  namespace: monitoring
+spec:
+  {{ rule | indent( width=2, first=False)}}

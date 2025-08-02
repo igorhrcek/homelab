@@ -1,183 +1,153 @@
 #!/usr/bin/env python3
 
-import yaml
-import json
 import os
+import yaml
 import sys
-import argparse
-from pathlib import Path
+import shutil
+import glob
+import subprocess
 
+def main():
+    AlertManifestGenerator()
 
-def convert_value_to_vmrule_format(value, indent_level=0):
-    """Convert a value to VMRule quoted string format with proper indentation."""
-    indent = "  " * indent_level
+class AlertManifestGenerator():
 
-    if isinstance(value, dict):
-        result = "\n"
-        for k, v in value.items():
-            result += f'{indent}"{k}":'
-            if isinstance(v, (dict, list)):
-                result += convert_value_to_vmrule_format(v, indent_level + 1)
-            else:
-                # Use | for multiline strings, |- for single line
-                if isinstance(v, str) and ('\n' in str(v) or len(str(v)) > 80):
-                    result += " |\n"
-                else:
-                    result += " |-\n"
-                # Handle multiline strings properly
-                str_value = str(v)
-                for line in str_value.splitlines():
-                    result += f"{indent}  {line}\n"
-        return result
+    DESTINATION_DIRECTORY = "kubernetes/apps/monitoring/victoriametrics/alerts"
+    SOURCE_DIRECTORY = "alerts"
+    TEMPLATES_DIRECTORY = "templates"
 
-    elif isinstance(value, list):
-        result = "\n"
-        for item in value:
-            result += f"{indent}- "  # Important: space after the dash
-            if isinstance(item, (dict, list)):
-                # For dict/list items, we need proper formatting
-                item_result = convert_value_to_vmrule_format(item, indent_level + 1)
-                # Remove the leading newline and adjust indentation
-                item_lines = item_result.strip().split('\n')
-                for i, line in enumerate(item_lines):
-                    if i == 0:
-                        result += line + "\n"
-                    else:
-                        result += f"{indent}  {line}\n"
-            else:
-                result += f"|-\n{indent}  {item}\n"
-        return result
+    def __init__(self):
+        self.purge_manifests()
+        self.generate_manifests()
 
-    else:
-        return f"|-\n{indent}  {value}\n"
+    def purge_manifests(self):
+        if os.path.exists(self.DESTINATION_DIRECTORY):
+            shutil.rmtree(self.DESTINATION_DIRECTORY, ignore_errors=True)
 
+        os.makedirs(self.DESTINATION_DIRECTORY, exist_ok=True)
 
-def convert_alert_file(input_file, output_dir):
-    """Convert a single alert file to VMRule format."""
-    input_path = Path(input_file)
-    # Add -rules suffix to the name
-    output_name = f"{input_path.stem}-rules"
-    output_path = Path(output_dir) / f"{output_name}.yaml"
+    def generate_manifests(self):
+        print(f"Converting alerts from {self.SOURCE_DIRECTORY} to {self.DESTINATION_DIRECTORY}")
 
-    print(f"Converting: {input_file} -> {output_path}")
+        # Check if source directory exists
+        if not os.path.exists(self.SOURCE_DIRECTORY):
+            print(f"Error: Source directory {self.SOURCE_DIRECTORY} does not exist")
+            sys.exit(1)
 
-    # Read the input file
-    with open(input_path, 'r') as f:
-        content = f.read()
+        # Find all YAML alert files
+        alert_files = []
+        alert_files.extend(glob.glob(os.path.join(self.SOURCE_DIRECTORY, "*.yaml")))
+        alert_files.extend(glob.glob(os.path.join(self.SOURCE_DIRECTORY, "*.yml")))
 
-    # Remove leading --- if present
-    if content.startswith('---'):
-        content = content[3:].lstrip()
+        if not alert_files:
+            print(f"No alert files found in {self.SOURCE_DIRECTORY}")
+            sys.exit(1)
 
-    # Parse the YAML content
-    try:
-        data = yaml.safe_load(content)
-    except yaml.YAMLError as e:
-        print(f"Error parsing YAML file {input_file}: {e}")
-        return False
+        print(f"Found {len(alert_files)} alert files")
 
-    # Generate VMRule YAML
-    vmrule_content = f"""apiVersion: operator.victoriametrics.com/v1beta1
+        # Process each alert file
+        for alert_file in alert_files:
+            self.process_alert_file(alert_file)
+
+        # Generate kustomization.yaml
+        self.write_kustomization()
+
+    def process_alert_file(self, alert_file):
+        """
+        Process a single alert file and generate VMRule manifest using makejinja
+        """
+        print(f"Processing: {alert_file}")
+
+        try:
+            with open(alert_file, "r") as file:
+                content = file.read()
+
+                # Remove leading --- if present
+                if content.startswith('---'):
+                    content = content[3:].lstrip()
+
+                yaml_content = yaml.safe_load(content)
+
+                # Extract name from filename and add -rules suffix
+                base_name = os.path.splitext(os.path.basename(alert_file))[0]
+                name = f"{base_name}-rules"
+
+                # Convert YAML to string with proper formatting
+                rule_yaml = yaml.safe_dump(yaml_content, default_style="|")
+
+                # Create VMRule content manually (since we want to avoid jinja2 dependency)
+                vmrule_content = f"""apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
 metadata:
-  name: {output_name}
+  name: {name}
   namespace: monitoring
 spec:
-"""
+  {self.indent_yaml(rule_yaml, 2)}"""
 
-    # Convert the data to VMRule format
-    for key, value in data.items():
-        vmrule_content += f'  "{key}":'
-        vmrule_content += convert_value_to_vmrule_format(value, 1)
+                # Write the output file
+                output_file = os.path.join(self.DESTINATION_DIRECTORY, f"{name}.yaml")
+                with open(output_file, "w") as f:
+                    f.write(vmrule_content)
 
-    # Write the output file
-    with open(output_path, 'w') as f:
-        f.write(vmrule_content)
+                print(f"Created: {output_file}")
 
-    print(f"Created: {output_path}")
-    return True
+        except Exception as e:
+            print(f"Error processing {alert_file}: {e}")
+            sys.exit(1)
 
+    def indent_yaml(self, yaml_string, spaces):
+        """
+        Indent each line of YAML string by specified number of spaces, except the first line
+        """
+        lines = yaml_string.split('\n')
+        indented_lines = []
 
-def generate_kustomization(output_dir):
-    """Generate kustomization.yaml file for all VMRule files."""
-    output_path = Path(output_dir)
-    kustomization_path = output_path / "kustomization.yaml"
+        for i, line in enumerate(lines):
+            if i == 0:
+                # Don't indent the first line
+                indented_lines.append(line)
+            elif line.strip():  # Don't indent empty lines
+                indented_lines.append(' ' * spaces + line)
+            else:
+                indented_lines.append(line)
 
-    # Find all YAML files except kustomization.yaml
-    yaml_files = [f for f in output_path.glob("*.yaml") if f.name != "kustomization.yaml"]
+        return '\n'.join(indented_lines)
 
-    if not yaml_files:
-        print("Warning: No YAML files found to add to kustomization.yaml")
-        return False
+    def write_kustomization(self):
+        """
+        Generate kustomization.yaml file
+        """
+        print("Generating kustomization.yaml...")
 
-    # Generate kustomization content
-    kustomization_content = """apiVersion: kustomize.config.k8s.io/v1beta1
+        try:
+            # Get all YAML files except kustomization.yaml
+            files = [f for f in os.listdir(self.DESTINATION_DIRECTORY)
+                    if f.endswith('.yaml') and f != 'kustomization.yaml']
+
+            if not files:
+                print("Warning: No YAML files found to add to kustomization.yaml")
+                return
+
+            # Create kustomization content
+            kustomization_content = """apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
 """
 
-    for yaml_file in sorted(yaml_files):
-        kustomization_content += f"- {yaml_file.name}\n"
-        print(f"Added to kustomization: {yaml_file.name}")
+            for filename in sorted(files):
+                kustomization_content += f"- {filename}\n"
 
-    # Write kustomization.yaml
-    with open(kustomization_path, 'w') as f:
-        f.write(kustomization_content)
+            # Write kustomization.yaml
+            output_file = os.path.join(self.DESTINATION_DIRECTORY, "kustomization.yaml")
+            with open(output_file, "w") as f:
+                f.write(kustomization_content)
 
-    print(f"Generated: {kustomization_path}")
-    return True
+            print(f"Generated: {output_file}")
 
-
-def main():
-    parser = argparse.ArgumentParser(description="Convert alert files to VictoriaMetrics VMRule format")
-    parser.add_argument("--input-dir", required=True, help="Directory containing alert files")
-    parser.add_argument("--output-dir", required=True, help="Output directory for VMRule files")
-    parser.add_argument("--clean", action="store_true", help="Clean output directory before conversion")
-
-    args = parser.parse_args()
-
-    input_dir = Path(args.input_dir)
-    output_dir = Path(args.output_dir)
-
-    # Validate input directory
-    if not input_dir.exists():
-        print(f"Error: Input directory {input_dir} does not exist")
-        sys.exit(1)
-
-    # Create output directory
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    # Clean output directory if requested
-    if args.clean:
-        for file in output_dir.glob("*"):
-            if file.is_file():
-                file.unlink()
-        print(f"Cleaned output directory: {output_dir}")
-
-    # Find alert files (YAML and JSON)
-    alert_files = list(input_dir.glob("*.yaml")) + list(input_dir.glob("*.yml")) + list(input_dir.glob("*.json"))
-
-    if not alert_files:
-        print(f"No alert files found in {input_dir}")
-        sys.exit(1)
-
-    print(f"Found {len(alert_files)} alert files in {input_dir}")
-
-    # Convert each file
-    success_count = 0
-    for alert_file in alert_files:
-        if convert_alert_file(alert_file, output_dir):
-            success_count += 1
-
-    print(f"Successfully converted {success_count}/{len(alert_files)} files")
-
-    # Generate kustomization.yaml
-    if success_count > 0:
-        generate_kustomization(output_dir)
-
-    print("Conversion complete!")
-
+        except Exception as e:
+            print(f"Error generating kustomization.yaml: {e}")
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()

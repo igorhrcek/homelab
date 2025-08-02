@@ -5,6 +5,6 @@ kind: Kustomization
 namespace: apps
 resources:
   - ./helmrelease.yaml
-  # - ./backup.yaml
+  - ./backup.yaml
   - ./secret.yaml
   - ./secret-backup.yaml

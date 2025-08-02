@@ -1,6 +1,28 @@
----
-# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
-  - ./node-exporter.yaml
+- alertmanager-summary.yaml
+- kubernetes-compute-namespace-pods.yaml
+- kubernetes-compute-namespace-workloads.yaml
+- kubernetes-compute-node-pods.yaml
+- kubernetes-compute-resources-pod.yaml
+- kubernetes-compute-resources.yaml
+- kubernetes-compute-workload.yaml
+- kubernetes-kubelet.yaml
+- kubernetes-kubernetes-persistent-volumes.yaml
+- kubernetes-networking-cluster.yaml
+- kubernetes-networking-namespace-pods.yaml
+- kubernetes-networking-namespace-workloads.yaml
+- kubernetes-networking-pods.yaml
+- kubernetes-networking-workload.yaml
+- kubernetes-nginx-ingress-controller.yaml
+- kubernetes-views-global.yaml
+- kubernetes-views-namespaces.yaml
+- kubernetes-views-node-pools.yaml
+- kubernetes-views-nodes.yaml
+- kubernetes-views-pods.yaml
+- kubernetes-volume-performance.yaml
+- node-exporter.yaml
+- victoriametrics-single.yaml
+- vmagent-summary.yaml

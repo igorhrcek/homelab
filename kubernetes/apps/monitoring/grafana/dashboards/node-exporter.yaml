@@ -4,7 +4,7 @@ metadata:
   name: node-exporter
   namespace: monitoring
   labels:
-     grafana_dashboard: "1"
+    grafana_dashboard: "1"
 data:
   node-exporter.json: |-
     {
@@ -18067,11 +18067,6 @@ data:
             "type": "datasource"
           },
           {
-            "current": {
-              "selected": false,
-              "text": "mailerlite-website",
-              "value": "mailerlite-website"
-            },
             "datasource": {
               "type": "prometheus",
               "uid": "${DS_PROMETHEUS}"

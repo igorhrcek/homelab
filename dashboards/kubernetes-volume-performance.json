@@ -1,0 +1,1535 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 2,
+  "id": 775,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decgbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "(label_replace(kube_persistentvolume_capacity_bytes, \"volumename\", \"$1\", \"persistentvolume\", \"(.+)\") / (1024*1024*1024)) * on (volumename) group_left(instance,device, persistentvolumeclaim)\n(max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"$pvc\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Disk Size",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^storageclass$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "kube_persistentvolumeclaim_info{persistentvolumeclaim=~\"$pvc\"}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Storage Class",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "keepLabels": [
+              "storageclass",
+              "cluster",
+              "container",
+              "endpoint",
+              "environment",
+              "instance",
+              "job",
+              "namespace",
+              "persistentvolumeclaim",
+              "pod"
+            ],
+            "mode": "columns",
+            "valueLabel": "__name__"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${base_throughput_multiplier:$sc}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Base Throughput (MB/s)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${throughput_per_gb_multiplier:$sc}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Throughput per Gib (MB/s)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${base_iops_multiplier:$sc}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Base IOPS",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${iops_per_gb_multiplier:$sc}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "IOPS per GB",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "name": "${DS_PROMETHEUS}",
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 50,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max by(instance, device) (rate(node_disk_io_time_seconds_total[5m])) * on (instance, device) group_left(persistentvolumeclaim, volumename)\n(max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"})",
+          "instant": false,
+          "legendFormat": "{{device}} - {{persistentvolumeclaim}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Disk Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "name": "${DS_PROMETHEUS}",
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 50,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance, device) (rate(node_disk_read_bytes_total[5m]) / rate(node_disk_written_bytes_total[5m]))\n* on (instance, device)\n group_left(persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"})",
+          "instant": false,
+          "legendFormat": "Throughput",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance, device) (rate(node_disk_reads_completed_total[5m]) / rate(node_disk_writes_completed_total[5m]))\n* on (instance, device)\n group_left(persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \"(.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "IOPS",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Read / Write Ratio",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "name": "${DS_PROMETHEUS}",
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 50,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum by (instance, device) (rate(node_disk_read_bytes_total[5m]) + rate(node_disk_written_bytes_total[5m])) / (1024 * 1024))\n\n/ on (instance, device) group_left(volumename, persistentvolumeclaim)\n((${throughput_per_gb} * sum by (volumename) (label_replace(kube_persistentvolume_capacity_bytes, \"volumename\", \"$1\", \"persistentvolume\", \"(.+)\")) / (1024 * 1024 * 1024) + ${base_throughput} )  \n* on (volumename) group_left(instance, device, persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"}))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{device}} - {{persistentvolumeclaim}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Disk Throughput Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "MBs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "(sum by (instance, device) (rate(node_disk_read_bytes_total[5m]) + rate(node_disk_written_bytes_total[5m])) / (1024 * 1024))\n* on (instance, device)\n group_left(persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\"))\n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"})",
+          "instant": false,
+          "legendFormat": "Current Throughput",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "((${throughput_per_gb} * sum by (volumename) (label_replace(kube_persistentvolume_capacity_bytes, \"volumename\", \"$1\", \"persistentvolume\", \"(.+)\")) / (1024 * 1024 * 1024) + ${base_throughput} ) \n* on (volumename) group_left(instance, device, persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \"(.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"}))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Limit",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Throughput in MBps",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 50,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance, device) (rate(node_disk_reads_completed_total[5m]) + rate(node_disk_writes_completed_total[5m]))\n\n/ on (instance, device) group_left(volumename, persistentvolumeclaim)\n((${iops_per_gb} * sum by (volumename) (label_replace(kube_persistentvolume_capacity_bytes, \"volumename\", \"$1\", \"persistentvolume\", \"(.+)\")) / (1024 * 1024 * 1024) + ${base_iops} ) \n* on (volumename) group_left(instance, device, persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"}))",
+          "instant": false,
+          "legendFormat": "{{device}} - {{persistentvolumeclaim}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Disk IOPS Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 50,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "iops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance, device) (rate(node_disk_reads_completed_total[5m]) + rate(node_disk_writes_completed_total[5m]))\n* on (instance, device)\n group_left(persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"})",
+          "instant": false,
+          "legendFormat": "Current",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "((${iops_per_gb} * sum by (volumename) (label_replace(kube_persistentvolume_capacity_bytes, \"volumename\", \"$1\", \"persistentvolume\", \"(.+)\")) / (1024 * 1024 * 1024) + ${base_iops} ) \n* on (volumename) group_left(instance, device, persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \"(.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"}))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Limit",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "IOPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$DS_PROMETHEUS"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 50,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$DS_PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "kubelet_volume_stats_used_bytes{persistentvolumeclaim=\"${pvc}\"} / on (persistentvolumeclaim) group_left(instance,device)\n(label_replace(kube_persistentvolume_capacity_bytes, \"volumename\", \"$1\", \"persistentvolume\", \"(.+)\") \n* on (volumename) group_left(instance,device, persistentvolumeclaim) (max by (instance, device, volumename) (label_replace(node_disk_info, \"volumename\", \"$1\", \"serial\", \".*(pvc.+)\")) \n* on (volumename) group_left(storageclass, persistentvolumeclaim) kube_persistentvolumeclaim_info{persistentvolumeclaim=\"${pvc}\"}))",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "rate",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Disk Usage Rate",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": [
+    "disk",
+    "kubernetes"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "premium-rwo",
+          "value": "6000"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "base_iops_multiplier",
+        "options": [
+          {
+            "selected": true,
+            "text": "premium-rwo",
+            "value": "6000"
+          },
+          {
+            "selected": true,
+            "text": "custom-ssd",
+            "value": "6000"
+          },
+          {
+            "selected": false,
+            "text": "standard-rwo",
+            "value": "3000"
+          },
+          {
+            "selected": false,
+            "text": "standard",
+            "value": "0"
+          }
+        ],
+        "query": "premium-rwo : 6000, custom-ssd : 6000, standard-rwo : 3000, standard : 0",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "premium-rwo",
+          "value": "0.48"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "throughput_per_gb_multiplier",
+        "options": [
+          {
+            "selected": true,
+            "text": "premium-rwo",
+            "value": "0.48"
+          },
+          {
+            "selected": true,
+            "text": "custom-ssd",
+            "value": "0.48"
+          },
+          {
+            "selected": false,
+            "text": "standard-rwo",
+            "value": "0.28"
+          },
+          {
+            "selected": false,
+            "text": "standard",
+            "value": "0.12"
+          }
+        ],
+        "query": "premium-rwo : 0.48, custom-ssd : 0.48, standard-rwo : 0.28, standard : 0.12",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "premium-rwo",
+          "value": "240"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "base_throughput_multiplier",
+        "options": [
+          {
+            "selected": true,
+            "text": "premium-rwo",
+            "value": "240"
+          },
+          {
+            "selected": true,
+            "text": "custom-ssd",
+            "value": "240"
+          },
+          {
+            "selected": false,
+            "text": "standard-rwo",
+            "value": "140"
+          },
+          {
+            "selected": false,
+            "text": "standard",
+            "value": "0"
+          }
+        ],
+        "query": "premium-rwo : 240, custom-ssd : 240, standard-rwo : 140, standard : 0",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "premium-rwo",
+          "value": "30"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "iops_per_gb_multiplier",
+        "options": [
+          {
+            "selected": true,
+            "text": "premium-rwo",
+            "value": "30"
+          },
+          {
+            "selected": true,
+            "text": "custom-ssd",
+            "value": "30"
+          },
+          {
+            "selected": false,
+            "text": "standard-rwo",
+            "value": "6"
+          },
+          {
+            "selected": false,
+            "text": "standard",
+            "value": "1.5"
+          }
+        ],
+        "query": "premium-rwo : 30, custom-ssd : 30, standard-rwo : 6, standard : 1.5 ",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "vmstorage-db-vmstorage-victoria-metrics-vm-0",
+          "value": "vmstorage-db-vmstorage-victoria-metrics-vm-0"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(kube_persistentvolumeclaim_info,persistentvolumeclaim)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "PersistentVolumeClaim",
+        "multi": false,
+        "name": "pvc",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(kube_persistentvolumeclaim_info,persistentvolumeclaim)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "standard-rwo",
+          "value": "standard-rwo"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(kube_persistentvolumeclaim_info{persistentvolumeclaim=\"$pvc\"},storageclass)",
+        "hide": 2,
+        "includeAll": false,
+        "label": "StorageClass",
+        "multi": false,
+        "name": "sc",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(kube_persistentvolumeclaim_info{persistentvolumeclaim=\"$pvc\"},storageclass)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "240",
+          "value": "240"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${base_throughput_multiplier:$sc})",
+        "hide": 2,
+        "includeAll": false,
+        "label": "Base Throughout MiBps",
+        "multi": false,
+        "name": "base_throughput",
+        "options": [],
+        "query": {
+          "qryType": 3,
+          "query": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${base_throughput_multiplier:$sc})",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/ (240|140) /",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "0.48",
+          "value": "0.48"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${throughput_per_gb_multiplier:$sc})",
+        "hide": 2,
+        "includeAll": false,
+        "label": "Throughput Per GiB (MiBps)",
+        "multi": false,
+        "name": "throughput_per_gb",
+        "options": [],
+        "query": {
+          "qryType": 3,
+          "query": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${throughput_per_gb_multiplier:$sc})",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/ (0.48|0.28) /",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "6000",
+          "value": "6000"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${base_iops_multiplier:$sc})",
+        "hide": 2,
+        "includeAll": false,
+        "label": "Base IOPS",
+        "multi": false,
+        "name": "base_iops",
+        "options": [],
+        "query": {
+          "qryType": 3,
+          "query": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${base_iops_multiplier:$sc})",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/ (3000|6000) /",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "30",
+          "value": "30"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${iops_per_gb_multiplier:$sc})",
+        "hide": 2,
+        "includeAll": false,
+        "label": "IOPS Per GiB",
+        "multi": false,
+        "name": "iops_per_gb",
+        "options": [],
+        "query": {
+          "qryType": 3,
+          "query": "query_result(max(kube_persistentvolumeclaim_info{storageclass=\"${sc}\", persistentvolumeclaim=\"${pvc}\"}) * ${iops_per_gb_multiplier:$sc})",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/ (30|6) /",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "VictoriaMetrics",
+          "value": "P4169E866C3094E38"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "Kubernetes / Volumes / Performance",
+  "uid": "k8s-volumes-performance",
+  "version": 8,
+  "weekStart": "monday"
+}

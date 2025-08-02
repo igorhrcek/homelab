@@ -23,6 +23,7 @@ includes:
   talos: .taskfiles/talos
   template: .taskfiles/template
   rook: .taskfiles/rook
+  dashboards: .taskfiles/dashboards
 
 tasks:
 

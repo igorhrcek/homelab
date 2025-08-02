@@ -4,7 +4,7 @@ metadata:
   name: grafana-datasource-victoria-metrics
   namespace: monitoring
   labels:
-     grafana_datasource: "1"
+    grafana_datasource: "1"
 data:
   datasource.yaml: |-
     apiVersion: 1

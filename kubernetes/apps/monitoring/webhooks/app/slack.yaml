@@ -25,16 +25,7 @@ spec:
           title: '{{ template "slack.monzo.title" . }}'
           icon_emoji: '{{ template "slack.monzo.icon_emoji" . }}'
           color: '{{ template "slack.monzo.color" . }}'
-          # text: '{{ template "slack.monzo.text" . }}'
-
-          text: >-
-            {{ range .Alerts }}
-
-            *{{ .Labels.severity | toUpper }}: {{ .Annotations.summary }}*
-            {{ "\n" }} {{ "\n" }}
-            {{ .Annotations.description }}
-
-            {{ end }}
+          text: '{{ template "slack.monzo.text" . }}'
           actions:
             - type: button
               text: "Query :mag:"

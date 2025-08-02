@@ -16,7 +16,7 @@ spec:
         "summary": |-
           1 is equal to 1
       "expr": |-
-        1 = 1
+        1 == 1
       "labels":
         "severity": |-
           warning

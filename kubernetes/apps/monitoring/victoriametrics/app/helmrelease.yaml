@@ -80,7 +80,7 @@ spec:
           group_wait: 1m
           group_interval: 5m
           repeat_interval: 3h
-          receiver: slack-monitoring
+          receiver: monitoring-slack-slack-monitoring
           routes:
             - receiver: blackhole
               matchers:

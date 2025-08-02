@@ -402,8 +402,6 @@ spec:
           {{ $labels.grafana_url }}/d/k8s-views-pods/kubernetes-views-pods
         "description": |
           OOMkill on the instance `{{ $labels.instance }}` was detected in the past `5 minutes`.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/HostNearlyOutOfMemory
         "summary": |-
           OOMkill was detected on the Node instance `{{ $labels.instance }}`
       "expr": |-
@@ -422,8 +420,6 @@ spec:
           {{ $labels.grafana_url }}/d/k8s-views-pods/kubernetes-views-pods
         "description": |
           `{{ $labels.statefulset }}` StatefulSet in namespace `{{ $labels.namespace }}` is down for the past `5 minutes`.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/KubernetesStatefulsetDown
         "summary": |-
           Kubernetes StatefulSet `{{ $labels.statefulset }}` is down
       "expr": |-
@@ -458,8 +454,6 @@ spec:
           {{ $labels.grafana_url }}/d/k8s-views-pods/kubernetes-views-pods
         "description": |
           `{{ $labels.horizontalpodautoscaler }}` HPA is not able to collect metrics on `{{ $labels.cluster }}` cluster.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/KubernetesHpaMetricAvailability
         "summary": |-
           Kubernetes HPA metric availability
       "expr": |-

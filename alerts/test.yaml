@@ -1,0 +1,12 @@
+---
+groups:
+  - name: test.rules
+    rules:
+      - alert: TestAlert
+        expr: 1 = 1
+        labels:
+          severity: warning
+        annotations:
+          summary: 1 is equal to 1
+          description: >
+            You wouldn't believe it

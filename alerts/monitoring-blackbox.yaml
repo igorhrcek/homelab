@@ -11,7 +11,6 @@ groups:
           summary: Blackbox probe for instance `{{ $labels.instance }}` took too long
           description: >
             Blackbox probe for instance `{{ $labels.instance }}` took more than `30s` to complete. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-          runbook_url: https://runbook.mailergroup.com/BlackboxProbeFailed
 
       - alert: BlackboxProbeHttpFailure
         expr: probe_http_status_code <= 199 OR probe_http_status_code >= 400
@@ -23,7 +22,6 @@ groups:
           summary: Blackbox probe HTTP failure for instance `{{ $labels.instance }}`
           description: >
             Blackbox probe for instance `{{ $labels.instance }}` failed with HTTP status code `{{ $value }}`. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-          runbook_url: https://runbook.mailergroup.com/BlackboxProbeFailed
 
       - alert: BlackboxProbeDNSFailure
         expr: probe_dns_lookup_time_seconds{job="blackbox-exporter"} > 5
@@ -34,7 +32,6 @@ groups:
           summary: Blackbox DNS resolution for instance `{{ $labels.instance }}` took too long
           description: >
             Blackbox was unable to perform DNS resolution for instance `{{ $labels.instance }}`, which took more than `5s` to complete. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-          runbook_url: https://runbook.mailergroup.com/BlackboxProbeFailed
 
       - alert: BlackboxProbeRedirectLoop
         expr: increase(probe_http_redirects[5m]) > 10
@@ -45,4 +42,3 @@ groups:
           summary: Redirect loop detected for instance `{{ $labels.instance }}`
           description: >
             Blackbox got stuck in redirect loop during checks for instance `{{ $labels.instance }}`. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-          runbook_url: https://runbook.mailergroup.com/BlackboxProbeFailed

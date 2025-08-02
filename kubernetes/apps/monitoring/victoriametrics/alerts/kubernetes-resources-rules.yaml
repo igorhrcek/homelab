@@ -15,8 +15,6 @@ spec:
           {{ $labels.grafana_url }}/d/monitoring-node-exporter-summary/monitoring-node-exporter-summary
         "description": |
           The CPU load of the instance `{{ $labels.nodename }}` is over set threshold of `80%`. The CPU load in the past `5 minutes` was `{{ $value | printf "%.2f" }}%`.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/KubeHostHighCPUUtilization
         "summary": |-
           Node `{{ $labels.nodename }}` has a high CPU load
       "expr": |-
@@ -37,8 +35,6 @@ spec:
           {{ $labels.grafana_url }}/d/monitoring-node-exporter-summary/monitoring-node-exporter-summary
         "description": |
           The CPU load of the instance `{{ $labels.nodename }}` is over set threshold of `90%`. The CPU load in the past `5 minutes` was `{{ $value | printf "%.2f" }}%`. This alert *should not be ignored* - please investigate and resolve the issue as quickly as possible by following a linked run book as a guide.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/KubeHostHighCPUUtilization
         "summary": |-
           Node `{{ $labels.nodename }}` has a very high CPU load
       "expr": |-

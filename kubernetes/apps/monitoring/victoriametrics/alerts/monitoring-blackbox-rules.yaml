@@ -13,8 +13,6 @@ spec:
       "annotations":
         "description": |
           Blackbox probe for instance `{{ $labels.instance }}` took more than `30s` to complete. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/BlackboxProbeFailed
         "summary": |-
           Blackbox probe for instance `{{ $labels.instance }}` took too long
       "expr": |-
@@ -29,8 +27,6 @@ spec:
       "annotations":
         "description": |
           Blackbox probe for instance `{{ $labels.instance }}` failed with HTTP status code `{{ $value }}`. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/BlackboxProbeFailed
         "summary": |-
           Blackbox probe HTTP failure for instance `{{ $labels.instance }}`
       "expr": |-
@@ -47,8 +43,6 @@ spec:
       "annotations":
         "description": |
           Blackbox was unable to perform DNS resolution for instance `{{ $labels.instance }}`, which took more than `5s` to complete. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/BlackboxProbeFailed
         "summary": |-
           Blackbox DNS resolution for instance `{{ $labels.instance }}` took too long
       "expr": |-
@@ -63,8 +57,6 @@ spec:
       "annotations":
         "description": |
           Blackbox got stuck in redirect loop during checks for instance `{{ $labels.instance }}`. This alert *should not be ignored* - please investigate the issue as quickly as possible using the linked runbook as a guide.
-        "runbook_url": |-
-          https://runbook.mailergroup.com/BlackboxProbeFailed
         "summary": |-
           Redirect loop detected for instance `{{ $labels.instance }}`
       "expr": |-

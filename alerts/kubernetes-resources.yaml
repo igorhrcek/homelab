@@ -15,7 +15,6 @@ groups:
             The CPU load of the instance `{{ $labels.nodename }}` is over set threshold of `80%`. The CPU load in the past `5 minutes` was `{{ $value
             | printf "%.2f" }}%`.
           dashboard_url: "{{ $labels.grafana_url }}/d/monitoring-node-exporter-summary/monitoring-node-exporter-summary"
-          runbook_url: https://runbook.mailergroup.com/KubeHostHighCPUUtilization
 
       - alert: KubeHostHighCPUUtilization
         expr: ((1 - avg by (instance) (sum by (instance, cpu) (rate(node_cpu_seconds_total{mode=~"idle|iowait", instance=~"10.*"}[5m])) )) * on(instance) group_left(nodename) node_uname_info{instance=~"10.*"} * 100 ) > 90
@@ -32,7 +31,6 @@ groups:
             | printf "%.2f" }}%`. This alert *should not be ignored* - please investigate and resolve the issue as quickly as possible by following
             a linked run book as a guide.
           dashboard_url: "{{ $labels.grafana_url }}/d/monitoring-node-exporter-summary/monitoring-node-exporter-summary"
-          runbook_url: https://runbook.mailergroup.com/KubeHostHighCPUUtilization
 
       - alert: KubeCPUOvercommit
         annotations:

@@ -316,7 +316,6 @@ groups:
           description: >
             OOMkill on the instance `{{ $labels.instance }}` was detected in the past `5 minutes`.
           dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-pods/kubernetes-views-pods"
-          runbook_url: https://runbook.mailergroup.com/HostNearlyOutOfMemory
 
       - alert: KubeStatefulsetDown
         expr: (kube_statefulset_status_replicas_ready / kube_statefulset_status_replicas) != 1
@@ -328,7 +327,6 @@ groups:
           summary: "Kubernetes StatefulSet `{{ $labels.statefulset }}` is down"
           description: >
             `{{ $labels.statefulset }}` StatefulSet in namespace `{{ $labels.namespace }}` is down for the past `5 minutes`.
-          runbook_url: "https://runbook.mailergroup.com/KubernetesStatefulsetDown"
           dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-pods/kubernetes-views-pods"
 
       - alert: KubeHpaScalingAbility
@@ -352,7 +350,6 @@ groups:
           summary: "Kubernetes HPA metric availability"
           description: >
             `{{ $labels.horizontalpodautoscaler }}` HPA is not able to collect metrics on `{{ $labels.cluster }}` cluster.
-          runbook_url: "https://runbook.mailergroup.com/KubernetesHpaMetricAvailability"
           dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-pods/kubernetes-views-pods"
 
       - alert: KubeHighTcpRetransmitRate

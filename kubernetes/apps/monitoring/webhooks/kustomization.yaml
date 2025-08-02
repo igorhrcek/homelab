@@ -5,7 +5,7 @@ metadata:
   name: webhooks-slack
   namespace: flux-system
 spec:
-  path: ./kubernetes/apps/monitoring/webhooks/slack
+  path: ./kubernetes/apps/monitoring/webhooks/app
   prune: true
   sourceRef:
     kind: GitRepository

@@ -6,3 +6,4 @@ resources:
   - ./prometheus-operator-crds/kustomization.yaml
   - ./victoriametrics/kustomization.yaml
   - ./grafana/kustomization.yaml
+  - ./webhooks/kustomization.yaml

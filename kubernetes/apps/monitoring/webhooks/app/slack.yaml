@@ -1,0 +1,45 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
+metadata:
+  name: slack
+  namespace: monitoring
+spec:
+  route:
+    group_by: ["alertname"]
+    group_wait: 5s
+    group_interval: 5m
+    repeat_interval: 3h
+    receiver: "slack-monitoring"
+    continue: true
+    matchers:
+      - "container!=metrics-server-nanny"
+  receivers:
+    - name: "slack-monitoring"
+      slack_configs:
+        - channel: "monitoring"
+          send_resolved: true
+          api_url:
+            key: SLACK_WEBHOOK_URL
+            name: webhooks-secrets
+          title: '{{ template "slack.remoteco.title" . }}'
+          icon_emoji: '{{ template "slack.remoteco.icon_emoji" . }}'
+          color: '{{ template "slack.remoteco.color" . }}'
+          text: >-
+            {{ range .Alerts }}
+
+            *{{ .Labels.severity | toUpper }}: {{ .Annotations.summary }}*
+            {{ "\n" }} {{ "\n" }}
+            {{ .Annotations.description }}
+
+            {{ end }}
+          actions:
+            - type: button
+              text: "Query :mag:"
+              url: "{{ (index .Alerts 0).GeneratorURL }}"
+            - type: button
+              text: "Dashboard :bar_chart:"
+              url: "{{ (index .Alerts 0).Annotations.dashboard_url }}"
+            - type: button
+              text: "Silence :no_bell:"
+              url: '{{ template "__alert_silence_link" . }}'

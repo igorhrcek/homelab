@@ -69,11 +69,6 @@ spec:
 
     vmalert:
       enabled: true
-      remoteWriteVMAgent: false
-      spec:
-        selectAllByDefault: true
-
-        evaluationInterval: 15s
       ingress:
         enabled: false
 

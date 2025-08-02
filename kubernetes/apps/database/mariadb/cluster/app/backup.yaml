@@ -1,0 +1,26 @@
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Backup
+metadata:
+  name: backup
+spec:
+  mariaDbRef:
+    name: mariadb-galera
+  schedule:
+    cron: "*/1 * * * *"
+    suspend: false
+  maxRetention: 720h
+  storage:
+    s3:
+      bucket: backups
+      prefix: mariadb
+      endpoint: s3:https://5fda75e1262c2da5d9b80e4218045c63.r2.cloudflarestorage.com
+      region: auto
+      accessKeyIdSecretKeyRef:
+        name: mariadb-backup-secret
+        key: AWS_ACCESS_KEY_ID
+      secretAccessKeySecretKeyRef:
+        name: mariadb-backup-secret
+        key: AWS_SECRET_ACCESS_KEY
+      tls:
+        enabled: true

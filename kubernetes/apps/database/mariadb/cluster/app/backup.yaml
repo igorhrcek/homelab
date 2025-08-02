@@ -14,7 +14,7 @@ spec:
     s3:
       bucket: backups
       prefix: mariadb
-      endpoint: s3:https://5fda75e1262c2da5d9b80e4218045c63.r2.cloudflarestorage.com
+      endpoint: 5fda75e1262c2da5d9b80e4218045c63.r2.cloudflarestorage.com
       region: auto
       accessKeyIdSecretKeyRef:
         name: mariadb-backup-secret

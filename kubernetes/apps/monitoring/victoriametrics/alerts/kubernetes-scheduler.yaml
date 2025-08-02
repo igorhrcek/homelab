@@ -1,0 +1,29 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: kubernetes-scheduler
+  namespace: monitoring
+spec:
+  # Converted from YAML
+  groups:
+    - name: kubernetes.scheduler.rules
+      rules:
+        - alert: KubeCronjobSuspended
+          expr: kube_cronjob_spec_suspend != 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Kubernetes CronJob is suspended"
+            description: >
+              CronJob `{{ $labels.namespace }}/{{ $labels.cronjob }}` has been suspended for over `5 minutes`.
+  
+        - alert: KubeCronjobTooLongExecution
+          expr: time() - kube_cronjob_next_schedule_time > 3600
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Kubernetes CronJob takes too long to complete"
+            description: >
+              CronJob `{{ $labels.namespace }}/{{ $labels.cronjob }}` on `{{ $labels.cluster }}` is taking more than `1h` to complete.

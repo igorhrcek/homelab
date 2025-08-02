@@ -1,0 +1,201 @@
+version: '3'
+
+tasks:
+  generate-dashboards:
+    desc: Convert JSON dashboards to Kubernetes ConfigMaps and generate kustomization.yaml
+    vars:
+      DASHBOARDS_DIR: dashboards
+      OUTPUT_DIR: kubernetes/apps/monitoring/grafana/dashboards
+    cmds:
+      # Clean the output directory
+      - rm -rf {{.OUTPUT_DIR}}/*
+
+      # Create the output directory if it doesn't exist
+      - mkdir -p {{.OUTPUT_DIR}}
+
+      # Debug: List JSON files
+      - echo "Looking for JSON files in {{.DASHBOARDS_DIR}}..."
+      - ls -la {{.DASHBOARDS_DIR}}/*.json || echo "No JSON files found in {{.DASHBOARDS_DIR}}"
+
+      # Convert each JSON file to a ConfigMap YAML using a shell script
+      - |
+        #!/bin/bash
+        set -e
+
+        DASHBOARDS_DIR="{{.DASHBOARDS_DIR}}"
+        OUTPUT_DIR="{{.OUTPUT_DIR}}"
+
+        echo "Converting dashboards from $DASHBOARDS_DIR to $OUTPUT_DIR"
+
+        # Check if dashboard directory exists
+        if [ ! -d "$DASHBOARDS_DIR" ]; then
+          echo "Error: Dashboard directory $DASHBOARDS_DIR does not exist"
+          exit 1
+        fi
+
+        # Convert each JSON file
+        for json_file in "$DASHBOARDS_DIR"/*.json; do
+          # Check if glob matches any files
+          if [ ! -f "$json_file" ]; then
+            echo "No JSON files found in $DASHBOARDS_DIR"
+            break
+          fi
+
+          # Extract filename without extension
+          basename_file=$(basename "$json_file" .json)
+
+          echo "Processing: $json_file -> ${basename_file}.yaml"
+
+          # Create the ConfigMap YAML
+          cat > "$OUTPUT_DIR/${basename_file}.yaml" << EOF
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: ${basename_file}
+          namespace: monitoring
+          labels:
+            grafana_dashboard: "1"
+        data:
+          ${basename_file}.json: |-
+        EOF
+
+          # Add the JSON content with proper indentation
+          sed 's/^/    /' "$json_file" >> "$OUTPUT_DIR/${basename_file}.yaml"
+
+          echo "Created ConfigMap: ${basename_file}.yaml"
+        done
+
+      # Generate kustomization.yaml
+      - |
+        #!/bin/bash
+        set -e
+
+        OUTPUT_DIR="{{.OUTPUT_DIR}}"
+        KUSTOMIZATION_FILE="$OUTPUT_DIR/kustomization.yaml"
+
+        echo "Generating kustomization.yaml..."
+
+        # Create the base kustomization.yaml
+        cat > "$KUSTOMIZATION_FILE" << EOF
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+
+        resources:
+        EOF
+
+        # Add all YAML files (except kustomization.yaml) to resources
+        found_files=false
+        for yaml_file in "$OUTPUT_DIR"/*.yaml; do
+          if [ -f "$yaml_file" ] && [ "$(basename "$yaml_file")" != "kustomization.yaml" ]; then
+            echo "- $(basename "$yaml_file")" >> "$KUSTOMIZATION_FILE"
+            echo "Added to kustomization: $(basename "$yaml_file")"
+            found_files=true
+          fi
+        done
+
+        if [ "$found_files" = false ]; then
+          echo "Warning: No YAML files found to add to kustomization.yaml"
+        else
+          echo "Generated kustomization.yaml successfully"
+        fi
+
+    silent: true
+
+  generate-alerts:
+    desc: Convert alert files to VictoriaMetrics VMRule resources and generate kustomization.yaml
+    vars:
+      ALERTS_DIR: alerts
+      OUTPUT_DIR: kubernetes/apps/monitoring/victoriametrics/alerts
+    cmds:
+      # Clean the output directory
+      - rm -rf {{.OUTPUT_DIR}}/*
+
+      # Create the output directory if it doesn't exist
+      - mkdir -p {{.OUTPUT_DIR}}
+
+      # Debug: List alert files
+      - echo "Looking for alert files in {{.ALERTS_DIR}}..."
+      - ls -la {{.ALERTS_DIR}}/* || echo "No alert files found in {{.ALERTS_DIR}}"
+
+      # Convert each alert file to a VMRule YAML using a shell script
+      - |
+        #!/bin/bash
+        set -e
+
+        ALERTS_DIR="{{.ALERTS_DIR}}"
+        OUTPUT_DIR="{{.OUTPUT_DIR}}"
+
+        echo "Converting alerts from $ALERTS_DIR to $OUTPUT_DIR"
+
+        # Check if alerts directory exists
+        if [ ! -d "$ALERTS_DIR" ]; then
+          echo "Error: Alerts directory $ALERTS_DIR does not exist"
+          exit 1
+        fi
+
+        # Convert each YAML alert file
+        for alert_file in "$ALERTS_DIR"/*.yaml "$ALERTS_DIR"/*.yml; do
+          # Check if glob matches any files
+          if [ ! -f "$alert_file" ]; then
+            continue
+          fi
+
+          # Extract filename without extension
+          basename_file=$(basename "$alert_file")
+          basename_no_ext="${basename_file%.*}"
+
+          echo "Processing: $alert_file -> ${basename_no_ext}.yaml"
+
+          # Create the VMRule YAML header
+          cat > "$OUTPUT_DIR/${basename_no_ext}.yaml" << EOF
+        apiVersion: operator.victoriametrics.com/v1beta1
+        kind: VMRule
+        metadata:
+          name: ${basename_no_ext}
+          namespace: monitoring
+        spec:
+        EOF
+
+          # For YAML files, extract content after the --- and add with proper indentation
+          echo "  # Converted from YAML" >> "$OUTPUT_DIR/${basename_no_ext}.yaml"
+          # Skip the initial --- line if present and indent all content by 2 spaces
+          sed -e '1{/^---$/d;}' "$alert_file" | sed 's/^/  /' >> "$OUTPUT_DIR/${basename_no_ext}.yaml"
+
+          echo "Created VMRule: ${basename_no_ext}.yaml"
+        done
+
+      # Generate kustomization.yaml for alerts
+      - |
+        #!/bin/bash
+        set -e
+
+        OUTPUT_DIR="{{.OUTPUT_DIR}}"
+        KUSTOMIZATION_FILE="$OUTPUT_DIR/kustomization.yaml"
+
+        echo "Generating kustomization.yaml for alerts..."
+
+        # Create the base kustomization.yaml
+        cat > "$KUSTOMIZATION_FILE" << EOF
+        apiVersion: kustomize.config.k8s.io/v1beta1
+        kind: Kustomization
+
+        resources:
+        EOF
+
+        # Add all YAML files (except kustomization.yaml) to resources
+        found_files=false
+        for yaml_file in "$OUTPUT_DIR"/*.yaml; do
+          if [ -f "$yaml_file" ] && [ "$(basename "$yaml_file")" != "kustomization.yaml" ]; then
+            echo "- $(basename "$yaml_file")" >> "$KUSTOMIZATION_FILE"
+            echo "Added to kustomization: $(basename "$yaml_file")"
+            found_files=true
+          fi
+        done
+
+        if [ "$found_files" = false ]; then
+          echo "Warning: No YAML files found to add to kustomization.yaml"
+        else
+          echo "Generated kustomization.yaml successfully"
+        fi
+
+    silent: true

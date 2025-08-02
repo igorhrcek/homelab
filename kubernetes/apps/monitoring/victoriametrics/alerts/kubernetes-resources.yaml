@@ -1,0 +1,189 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: kubernetes-resources
+  namespace: monitoring
+spec:
+  # Converted from YAML
+  groups:
+    - name: kubernetes.resources.rules
+      rules:
+        - alert: KubeHostHighCPUUtilization
+          expr: ((1 - avg by (instance) (sum by (instance, cpu) (rate(node_cpu_seconds_total{mode=~"idle|iowait", instance=~"10.*"}[5m])) )) * on(instance) group_left(nodename) node_uname_info{instance=~"10.*"} * 100 ) > 80
+          for: 5m
+          labels:
+            severity: warning
+            robusta_enrichment_graph: "true"
+            robusta_enrichment_graph_format: "Percentage"
+          annotations:
+            summary: Node `{{ $labels.nodename }}` has a high CPU load
+            description: >
+              The CPU load of the instance `{{ $labels.nodename }}` is over set threshold of `80%`. The CPU load in the past `5 minutes` was `{{ $value
+              | printf "%.2f" }}%`.
+            dashboard_url: "{{ $labels.grafana_url }}/d/monitoring-node-exporter-summary/monitoring-node-exporter-summary"
+            runbook_url: https://runbook.mailergroup.com/KubeHostHighCPUUtilization
+  
+        - alert: KubeHostHighCPUUtilization
+          expr: ((1 - avg by (instance) (sum by (instance, cpu) (rate(node_cpu_seconds_total{mode=~"idle|iowait", instance=~"10.*"}[5m])) )) * on(instance) group_left(nodename) node_uname_info{instance=~"10.*"} * 100 ) > 90
+          for: 5m
+          labels:
+            severity: critical
+            robusta_enrichment_graph: "true"
+            robusta_enrichment_graph_format: "Percentage"
+            robusta_incidentio_severity: minor
+          annotations:
+            summary: Node `{{ $labels.nodename }}` has a very high CPU load
+            description: >
+              The CPU load of the instance `{{ $labels.nodename }}` is over set threshold of `90%`. The CPU load in the past `5 minutes` was `{{ $value
+              | printf "%.2f" }}%`. This alert *should not be ignored* - please investigate and resolve the issue as quickly as possible by following
+              a linked run book as a guide.
+            dashboard_url: "{{ $labels.grafana_url }}/d/monitoring-node-exporter-summary/monitoring-node-exporter-summary"
+            runbook_url: https://runbook.mailergroup.com/KubeHostHighCPUUtilization
+  
+        - alert: KubeCPUOvercommit
+          annotations:
+            description: >
+              Cluster has overcommitted CPU resource requests for Pods by `{{ $value }}` CPU shares and cannot tolerate node failure.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecpuovercommit
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Cluster has overcommitted CPU resource requests.
+          expr: |
+            sum(namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"})) > 0
+            and
+            (sum(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"})) > 0
+          for: 10m
+          labels:
+            severity: warning
+  
+        - alert: KubeMemoryOvercommit
+          annotations:
+            description: >
+              Cluster has overcommitted memory resource requests for Pods by `{{ $value | humanize }}` bytes and cannot tolerate node failure.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubememoryovercommit
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Cluster has overcommitted memory resource requests.
+          expr: |
+            sum(namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"})) > 0
+            and
+            (sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"}) - max(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"})) > 0
+          for: 10m
+          labels:
+            severity: warning
+  
+        - alert: KubeCPUQuotaOvercommit
+          annotations:
+            description: >
+              Cluster has overcommitted CPU resource requests for Namespaces.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecpuquotaovercommit
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Cluster has overcommitted CPU resource requests.
+          expr: |
+            sum(min without(resource) (kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"(cpu|requests.cpu)"}))
+              /
+            sum(kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"})
+              > 1.5
+          for: 5m
+          labels:
+            severity: warning
+  
+        - alert: KubeMemoryQuotaOvercommit
+          annotations:
+            description: >
+              Cluster has overcommitted memory resource requests for Namespaces.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubememoryquotaovercommit
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Cluster has overcommitted memory resource requests.
+          expr: |
+            sum(min without(resource) (kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"(memory|requests.memory)"}))
+              /
+            sum(kube_node_status_allocatable{resource="memory", job="kube-state-metrics"})
+              > 1.5
+          for: 5m
+          labels:
+            severity: warning
+  
+        - alert: KubeQuotaAlmostFull
+          annotations:
+            description: >
+              Namespace `{{ $labels.namespace }}` is using `{{ $value | humanizePercentage }}` of its `{{ $labels.resource }}` quota.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubequotaalmostfull
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Namespace quota is going to be full.
+          expr: |
+            kube_resourcequota{job="kube-state-metrics", type="used"}
+              / ignoring(instance, job, type)
+            (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+              > 0.9 < 1
+          for: 15m
+          labels:
+            severity: info
+  
+        - alert: KubeQuotaFullyUsed
+          annotations:
+            description: >
+              Namespace `{{ $labels.namespace }}` is using `{{ $value | humanizePercentage }}` of its `{{ $labels.resource }}` quota.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubequotafullyused
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Namespace quota is fully used.
+          expr: |
+            kube_resourcequota{job="kube-state-metrics", type="used"}
+              / ignoring(instance, job, type)
+            (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+              == 1
+          for: 15m
+          labels:
+            severity: info
+  
+        - alert: KubeQuotaExceeded
+          annotations:
+            description: >
+              Namespace `{{ $labels.namespace }}` is using `{{ $value | humanizePercentage }}` of its `{{ $labels.resource }}` quota.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubequotaexceeded
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Namespace quota has exceeded the limits.
+          expr: |
+            kube_resourcequota{job="kube-state-metrics", type="used"}
+              / ignoring(instance, job, type)
+            (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+              > 1
+          for: 15m
+          labels:
+            severity: warning
+  
+        - alert: CPUThrottlingHigh
+          annotations:
+            description: >
+              `{{ $value | humanizePercentage }}` throttling of CPU in namespace `{{ $labels.namespace }}` for container `{{ $labels.container }}` in pod `{{ $labels.pod }}`.
+            runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-cputhrottlinghigh
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+            summary: Processes experience elevated CPU throttling.
+          expr: |
+            sum(increase(container_cpu_cfs_throttled_periods_total{container!="", job="cadvisor"}[5m])) without (id, metrics_path, name, image, endpoint, job, node)
+              /
+            sum(increase(container_cpu_cfs_periods_total{job="cadvisor"}[5m])) without (id, metrics_path, name, image, endpoint, job, node)
+              > ( 25 / 100 )
+          for: 15m
+          labels:
+            severity: info
+  
+        - alert: KubeNodeMemoryPressure
+          expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Kubernetes node has high memory pressure"
+            description: >
+              The node `{{ $labels.node }}` has MemoryPressure condition for the last `10 minutes`.
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"
+  
+        - alert: KubeNodeDiskPressure
+          expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Kubernetes node has high disk pressure"
+            description: >
+              The node `{{ $labels.node }}` has DiskPressure condition for the past `10 minutes`.
+            dashboard_url: "{{ $labels.grafana_url }}/d/k8s-views-global/kubernetes-views-global"

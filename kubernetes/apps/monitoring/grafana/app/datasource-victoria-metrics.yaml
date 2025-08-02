@@ -11,4 +11,4 @@ data:
     datasources:
     - name: VictoriaMetrics
       type: prometheus
-      url: http://vmselect-victoria-metrics-vm.monitoring.svc:8481/select/0/prometheus
+      url: http://vmsingle-victoria-metrics-vm.monitoring.svc.cluster.local:8428/prometheus

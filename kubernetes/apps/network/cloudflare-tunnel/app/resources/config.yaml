@@ -7,10 +7,6 @@ ingress:
     service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: vmlogs.hrcek.rs
     service: http://victoria-logs-victoria-logs-single-server.monitoring.svc.cluster.local:9428
-  - hostname: vmui.hrcek.rs
-    service: http://vmsingle-victoriametrics.monitoring.svc.cluster.local:8428
-  - hostname: alrtmngr.hrcek.rs
-    service: http://vmalertmanager-victoriametrics.monitoring.svc.cluster.local:9093
   - hostname: "*.${SECRET_DOMAIN}"
     service: *svc
   - service: http_status:404

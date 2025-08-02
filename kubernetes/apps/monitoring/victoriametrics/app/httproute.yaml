@@ -17,3 +17,43 @@ spec:
         - name: vmagent-victoriametrics
           namespace: monitoring
           port: 8429
+
+---
+# yaml-language-server: $schema=https://github.com/datreeio/CRDs-catalog/raw/refs/heads/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmui
+  namespace: monitoring
+spec:
+  hostnames:
+    - vmui.hrcek.rs
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+      sectionName: https
+  rules:
+    - backendRefs:
+        - name: vmsingle-victoriametrics
+          namespace: monitoring
+          port: 8428
+
+---
+# yaml-language-server: $schema=https://github.com/datreeio/CRDs-catalog/raw/refs/heads/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: alrtmngr
+  namespace: monitoring
+spec:
+  hostnames:
+    - alrtmngr.hrcek.rs
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+      sectionName: https
+  rules:
+    - backendRefs:
+        - name: vmalertmanager-victoriametrics
+          namespace: monitoring
+          port: 9093

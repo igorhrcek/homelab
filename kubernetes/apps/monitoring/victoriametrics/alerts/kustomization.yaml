@@ -2,18 +2,18 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- kubernetes-apiserver.yaml
-- kubernetes-apps.yaml
-- kubernetes-controller.yaml
-- kubernetes-kubelet.yaml
-- kubernetes-recorded-rules.yaml
-- kubernetes-resources.yaml
-- kubernetes-scheduler.yaml
-- kubernetes-storage.yaml
-- kubernetes-system.yaml
-- monitoring-blackbox.yaml
-- victoriametrics-alertmanager.yaml
-- victoriametrics-cluster.yaml
-- victoriametrics-health.yaml
-- victoriametrics-vmagent.yaml
-- victoriametrics-vmalert.yaml
+- kubernetes-apiserver-rules.yaml
+- kubernetes-apps-rules.yaml
+- kubernetes-controller-rules.yaml
+- kubernetes-kubelet-rules.yaml
+- kubernetes-recorded-rules-rules.yaml
+- kubernetes-resources-rules.yaml
+- kubernetes-scheduler-rules.yaml
+- kubernetes-storage-rules.yaml
+- kubernetes-system-rules.yaml
+- monitoring-blackbox-rules.yaml
+- victoriametrics-alertmanager-rules.yaml
+- victoriametrics-cluster-rules.yaml
+- victoriametrics-health-rules.yaml
+- victoriametrics-vmagent-rules.yaml
+- victoriametrics-vmalert-rules.yaml

@@ -19,7 +19,11 @@ def convert_value_to_vmrule_format(value, indent_level=0):
             if isinstance(v, (dict, list)):
                 result += convert_value_to_vmrule_format(v, indent_level + 1)
             else:
-                result += " |-\n"
+                # Use | for multiline strings, |- for single line
+                if isinstance(v, str) and ('\n' in str(v) or len(str(v)) > 80):
+                    result += " |\n"
+                else:
+                    result += " |-\n"
                 # Handle multiline strings properly
                 str_value = str(v)
                 for line in str_value.splitlines():
@@ -29,21 +33,31 @@ def convert_value_to_vmrule_format(value, indent_level=0):
     elif isinstance(value, list):
         result = "\n"
         for item in value:
-            result += f"{indent}-"
+            result += f"{indent}- "  # Important: space after the dash
             if isinstance(item, (dict, list)):
-                result += convert_value_to_vmrule_format(item, indent_level + 1)
+                # For dict/list items, we need proper formatting
+                item_result = convert_value_to_vmrule_format(item, indent_level + 1)
+                # Remove the leading newline and adjust indentation
+                item_lines = item_result.strip().split('\n')
+                for i, line in enumerate(item_lines):
+                    if i == 0:
+                        result += line + "\n"
+                    else:
+                        result += f"{indent}  {line}\n"
             else:
-                result += f" |-\n{indent}  {item}\n"
+                result += f"|-\n{indent}  {item}\n"
         return result
 
     else:
-        return f" |-\n{indent}  {value}\n"
+        return f"|-\n{indent}  {value}\n"
 
 
 def convert_alert_file(input_file, output_dir):
     """Convert a single alert file to VMRule format."""
     input_path = Path(input_file)
-    output_path = Path(output_dir) / f"{input_path.stem}.yaml"
+    # Add -rules suffix to the name
+    output_name = f"{input_path.stem}-rules"
+    output_path = Path(output_dir) / f"{output_name}.yaml"
 
     print(f"Converting: {input_file} -> {output_path}")
 
@@ -66,7 +80,7 @@ def convert_alert_file(input_file, output_dir):
     vmrule_content = f"""apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMRule
 metadata:
-  name: {input_path.stem}
+  name: {output_name}
   namespace: monitoring
 spec:
 """

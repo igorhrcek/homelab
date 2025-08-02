@@ -67,8 +67,36 @@ spec:
       monzoTemplate:
         enabled: true
 
+      spec:
+        disableNamespaceMatcher: true
+        externalURL: "https://alrtmngr.hrcek.rs"
+        disableRouteContinueEnforce: true
+
+      config:
+        global:
+          resolve_timeout: 5m
+        route:
+          group_by: ["alertname"]
+          group_wait: 1m
+          group_interval: 5m
+          repeat_interval: 3h
+          receiver: devnull
+          routes:
+            - receiver: blackhole
+              matchers:
+                - "severity=blackhole"
+              continue: true
+        receivers:
+          - name: devnull
+          - name: blackhole
+
     vmalert:
       enabled: true
+      remoteWriteVMAgent: false
+      spec:
+        selectAllByDefault: true
+
+        evaluationInterval: 15s
       ingress:
         enabled: false
 

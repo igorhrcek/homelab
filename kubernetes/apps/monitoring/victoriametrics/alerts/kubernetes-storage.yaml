@@ -4,18 +4,24 @@ metadata:
   name: kubernetes-storage
   namespace: monitoring
 spec:
-  # Converted from YAML
-  groups:
-    - name: kubernetes.storage.rules
-      rules:
-      - alert: KubePersistentVolumeFillingUp
-        annotations:
-          description: >
-              The PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` {{ with $labels.cluster -}} on Cluster `{{ . }}` {{- end }} is only `{{ $value | humanizePercentage }}` free.
-          runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumefillingup
-          dashboard_url: "{{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes"
-          summary: PersistentVolume is filling up.
-        expr: |
+  "groups":
+  -
+    "name": |-
+      kubernetes.storage.rules
+    "rules":
+      -
+        "alert": |-
+          KubePersistentVolumeFillingUp
+        "annotations":
+          "description": |-
+            The PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` {{ with $labels.cluster -}} on Cluster `{{ . }}` {{- end }} is only `{{ $value | humanizePercentage }}` free.
+          "runbook_url": |-
+            https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumefillingup
+          "dashboard_url": |-
+            {{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes
+          "summary": |-
+            PersistentVolume is filling up.
+        "expr": |-
           (
             kubelet_volume_stats_available_bytes{job="kubelet"}
               /
@@ -27,19 +33,26 @@ spec:
           kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
           unless on(cluster, namespace, persistentvolumeclaim)
           kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1
-        for: 1m
-        labels:
-          severity: critical
-          robusta_incidentio_severity: major
-  
-      - alert: KubePersistentVolumeFillingUp
-        annotations:
-          description: >
-              Based on recent sampling, the PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` {{ with $labels.cluster -}} on Cluster `{{ . }}` {{- end }} is expected to fill up within four days. Currently `{{ $value | humanizePercentage }}` is available.
-          runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumefillingup
-          dashboard_url: "{{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes"
-          summary: PersistentVolume is filling up.
-        expr: |
+        "for": |-
+          1m
+        "labels":
+          "severity": |-
+            critical
+          "robusta_incidentio_severity": |-
+            major
+      -
+        "alert": |-
+          KubePersistentVolumeFillingUp
+        "annotations":
+          "description": |-
+            Based on recent sampling, the PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` {{ with $labels.cluster -}} on Cluster `{{ . }}` {{- end }} is expected to fill up within four days. Currently `{{ $value | humanizePercentage }}` is available.
+          "runbook_url": |-
+            https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumefillingup
+          "dashboard_url": |-
+            {{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes
+          "summary": |-
+            PersistentVolume is filling up.
+        "expr": |-
           (
             kubelet_volume_stats_available_bytes{job="kubelet"}
               /
@@ -53,18 +66,24 @@ spec:
           kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
           unless on(cluster, namespace, persistentvolumeclaim)
           kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1
-        for: 1h
-        labels:
-          severity: warning
-  
-      - alert: KubePersistentVolumeInodesFillingUp
-        annotations:
-          description: >
-              The PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` `{{ with $labels.cluster -}}` on Cluster `{{ . }}` `{{- end }}` only has `{{ $value | humanizePercentage }}` free inodes.
-          runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumeinodesfillingup
-          dashboard_url: "{{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes"
-          summary: PersistentVolumeInodes are filling up.
-        expr: |
+        "for": |-
+          1h
+        "labels":
+          "severity": |-
+            warning
+      -
+        "alert": |-
+          KubePersistentVolumeInodesFillingUp
+        "annotations":
+          "description": |-
+            The PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` `{{ with $labels.cluster -}}` on Cluster `{{ . }}` `{{- end }}` only has `{{ $value | humanizePercentage }}` free inodes.
+          "runbook_url": |-
+            https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumeinodesfillingup
+          "dashboard_url": |-
+            {{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes
+          "summary": |-
+            PersistentVolumeInodes are filling up.
+        "expr": |-
           (
             kubelet_volume_stats_inodes_free{job="kubelet"}
               /
@@ -76,21 +95,30 @@ spec:
           kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
           unless on(cluster, namespace, persistentvolumeclaim)
           kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1
-        for: 1m
-        labels:
-          severity: critical
-          robusta_enrichment_graph: "true"
-          robusta_enrichment_graph_format: "Percentage"
-          robusta_incidentio_severity: major
-  
-      - alert: KubePersistentVolumeInodesFillingUp
-        annotations:
-          description: >
-              Based on recent sampling, the PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` `{{ with $labels.cluster -}}` on Cluster `{{ . }}` `{{- end }}` is expected to run out of inodes within four days. Currently `{{ $value | humanizePercentage }}` of its inodes are free.
-          runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumeinodesfillingup
-          dashboard_url: "{{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes"
-          summary: PersistentVolumeInodes are filling up.
-        expr: |
+        "for": |-
+          1m
+        "labels":
+          "severity": |-
+            critical
+          "robusta_enrichment_graph": |-
+            true
+          "robusta_enrichment_graph_format": |-
+            Percentage
+          "robusta_incidentio_severity": |-
+            major
+      -
+        "alert": |-
+          KubePersistentVolumeInodesFillingUp
+        "annotations":
+          "description": |-
+            Based on recent sampling, the PersistentVolume claimed by `{{ $labels.persistentvolumeclaim }}` in Namespace `{{ $labels.namespace }}` `{{ with $labels.cluster -}}` on Cluster `{{ . }}` `{{- end }}` is expected to run out of inodes within four days. Currently `{{ $value | humanizePercentage }}` of its inodes are free.
+          "runbook_url": |-
+            https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumeinodesfillingup
+          "dashboard_url": |-
+            {{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes
+          "summary": |-
+            PersistentVolumeInodes are filling up.
+        "expr": |-
           (
             kubelet_volume_stats_inodes_free{job="kubelet"}
               /
@@ -104,33 +132,50 @@ spec:
           kube_persistentvolumeclaim_access_mode{ access_mode="ReadOnlyMany"} == 1
           unless on(cluster, namespace, persistentvolumeclaim)
           kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1
-        for: 1h
-        labels:
-          severity: warning
-          robusta_enrichment_graph: "true"
-          robusta_enrichment_graph_format: "Percentage"
-  
-      - alert: KubePersistentVolumeErrors
-        annotations:
-          description: >
-              The persistent volume `{{ $labels.persistentvolume }}` {{ with $labels.cluster -}} on Cluster `{{ . }}` {{- end }} has status `{{ $labels.phase }}`.
-          runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumeerrors
-          dashboard_url: "{{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes"
-          summary: PersistentVolume is having issues with provisioning.
-        expr: |
+        "for": |-
+          1h
+        "labels":
+          "severity": |-
+            warning
+          "robusta_enrichment_graph": |-
+            true
+          "robusta_enrichment_graph_format": |-
+            Percentage
+      -
+        "alert": |-
+          KubePersistentVolumeErrors
+        "annotations":
+          "description": |-
+            The persistent volume `{{ $labels.persistentvolume }}` {{ with $labels.cluster -}} on Cluster `{{ . }}` {{- end }} has status `{{ $labels.phase }}`.
+          "runbook_url": |-
+            https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepersistentvolumeerrors
+          "dashboard_url": |-
+            {{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes
+          "summary": |-
+            PersistentVolume is having issues with provisioning.
+        "expr": |-
           kube_persistentvolume_status_phase{phase=~"Failed|Pending",job="kube-state-metrics"} > 0
-        for: 5m
-        labels:
-          severity: critical
-          robusta_incidentio_severity: major
-  
-      - alert: KubePersistentvolumeclaimPending
-        expr: kube_persistentvolumeclaim_status_phase{phase="Pending"} == 1
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: Kubernetes PersistentVolumeClaim is pending state
-          description: >
+        "for": |-
+          5m
+        "labels":
+          "severity": |-
+            critical
+          "robusta_incidentio_severity": |-
+            major
+      -
+        "alert": |-
+          KubePersistentvolumeclaimPending
+        "expr": |-
+          kube_persistentvolumeclaim_status_phase{phase="Pending"} == 1
+        "for": |-
+          5m
+        "labels":
+          "severity": |-
+            warning
+        "annotations":
+          "summary": |-
+            Kubernetes PersistentVolumeClaim is pending state
+          "description": |-
             PersistentVolumeClaim `{{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}` is pending state for the last `5 minutes`.
-          dashboard_url: "{{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes"
+          "dashboard_url": |-
+            {{ $labels.grafana_url }}/d/k8s-persistent-volumes/kubernetes-persistent-volumes

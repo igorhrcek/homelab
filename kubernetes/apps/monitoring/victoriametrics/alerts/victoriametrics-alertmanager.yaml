@@ -4,34 +4,47 @@ metadata:
   name: victoriametrics-alertmanager
   namespace: monitoring
 spec:
-  # Converted from YAML
-  groups:
-    - name: victoriametrics.alertmanager.rules
-      rules:
-        - alert: AlertmanagerFailedReload
-          annotations:
-            summary: Reloading an Alertmanager configuration has failed.
-            description: >
-              Configuration has failed to load for `{{ $labels.namespace }}/{{ $labels.pod}}`. This may be due to a syntax error in the configuration file. You should check the logs for the Alertmanager pod for more information.
-            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedreload
-          expr: max_over_time(alertmanager_config_last_reload_successful{job="vmalertmanager-victoria-metrics-vm",namespace="monitoring"}[5m]) == 0
-          for: 10m
-          labels:
-            severity: warning
-  
-        - alert: AlertmanagerFailedToSendAlerts
-          annotations:
-            description: >
-              Alertmanager {{ $labels.namespace }}/{{ $labels.pod}} failed to send {{ $value | humanizePercentage }} of notifications to {{ $labels.integration }}.
-            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedtosendalerts
-            summary: An Alertmanager instance failed to send notifications.
-          expr: |-
-            (
-              rate(alertmanager_notifications_failed_total{job="vmalertmanager-victoria-metrics-vm",namespace="monitoring"}[5m])
-            /
-              rate(alertmanager_notifications_total{job="vmalertmanager-victoria-metrics-vm",namespace="monitoring"}[5m])
-            )
-            > 0.01
-          for: 5m
-          labels:
-            severity: warning
+  "groups":
+  -
+    "name": |-
+      victoriametrics.alertmanager.rules
+    "rules":
+      -
+        "alert": |-
+          AlertmanagerFailedReload
+        "annotations":
+          "summary": |-
+            Reloading an Alertmanager configuration has failed.
+          "description": |-
+            Configuration has failed to load for `{{ $labels.namespace }}/{{ $labels.pod}}`. This may be due to a syntax error in the configuration file. You should check the logs for the Alertmanager pod for more information.
+          "runbook_url": |-
+            https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedreload
+        "expr": |-
+          max_over_time(alertmanager_config_last_reload_successful{job="vmalertmanager-victoria-metrics-vm",namespace="monitoring"}[5m]) == 0
+        "for": |-
+          10m
+        "labels":
+          "severity": |-
+            warning
+      -
+        "alert": |-
+          AlertmanagerFailedToSendAlerts
+        "annotations":
+          "description": |-
+            Alertmanager {{ $labels.namespace }}/{{ $labels.pod}} failed to send {{ $value | humanizePercentage }} of notifications to {{ $labels.integration }}.
+          "runbook_url": |-
+            https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedtosendalerts
+          "summary": |-
+            An Alertmanager instance failed to send notifications.
+        "expr": |-
+          (
+            rate(alertmanager_notifications_failed_total{job="vmalertmanager-victoria-metrics-vm",namespace="monitoring"}[5m])
+          /
+            rate(alertmanager_notifications_total{job="vmalertmanager-victoria-metrics-vm",namespace="monitoring"}[5m])
+          )
+          > 0.01
+        "for": |-
+          5m
+        "labels":
+          "severity": |-
+            warning

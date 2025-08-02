@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  # - ./vmalertmanager.yaml
+  - ./httproute.yaml

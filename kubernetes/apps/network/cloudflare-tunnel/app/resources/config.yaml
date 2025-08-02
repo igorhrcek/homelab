@@ -5,8 +5,6 @@ originRequest:
 ingress:
   - hostname: "${SECRET_DOMAIN}"
     service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
-  - hostname: vmagent.hrcek.rs
-    service: http://vmagent-victoriametrics.monitoring.svc.cluster.local:8429
   - hostname: vmlogs.hrcek.rs
     service: http://victoria-logs-victoria-logs-single-server.monitoring.svc.cluster.local:9428
   - hostname: vmui.hrcek.rs

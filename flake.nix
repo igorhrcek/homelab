@@ -36,6 +36,7 @@
             stern
             talosctl
             yq
+            fzf
           ] ++ [
             talhelper.packages.${system}.default
           ];

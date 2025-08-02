@@ -65,38 +65,7 @@ spec:
       ingress:
         enabled: false
       monzoTemplate:
-        enabled: false
-
-      templateFiles:
-        telegram.tmpl: |-
-          {{ define "alert_list" }}
-          {{- range . }}
-          🪪 <b>{{ .Labels.alertname }}</b>
-          {{- if eq .Labels.severity "critical" }}
-          🚨 CRITICAL 🚨 {{ end }}
-          {{- if eq .Labels.severity "warning" }}
-          ⚠️ WARNING ⚠️{{ end }}
-          {{- if .Annotations.summary }}
-          📝 {{ .Annotations.summary }}{{ end }}
-          {{- if .Annotations.description }}
-          📖 {{ .Annotations.description }}{{ end }}
-
-          🏷 Labels:
-          {{ range .Labels.SortedPairs }}• {{ .Name }}: {{ .Value }}
-          {{ end }}
-          {{ end }}
-          {{ end }}
-
-          {{ define "telegram.message" }}
-          {{ if gt (len .Alerts.Firing) 0 }}
-          🔥 Alerts Firing 🔥
-          {{ template "alert_list" .Alerts.Firing }}
-          {{ end }}
-          {{ if gt (len .Alerts.Resolved) 0 }}
-          ✅ Alerts Resolved ✅
-          {{ template "alert_list" .Alerts.Resolved }}
-          {{ end }}
-          {{ end }}
+        enabled: true
 
       config:
         global:

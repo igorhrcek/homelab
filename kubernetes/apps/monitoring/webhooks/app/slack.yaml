@@ -22,9 +22,11 @@ spec:
           api_url:
             key: SLACK_WEBHOOK_URL
             name: webhooks-secrets
-          title: '{{ template "slack.remoteco.title" . }}'
-          icon_emoji: '{{ template "slack.remoteco.icon_emoji" . }}'
-          color: '{{ template "slack.remoteco.color" . }}'
+          title: '{{ template "slack.monzo.title" . }}'
+          icon_emoji: '{{ template "slack.monzo.icon_emoji" . }}'
+          color: '{{ template "slack.monzo.color" . }}'
+          # text: '{{ template "slack.monzo.text" . }}'
+
           text: >-
             {{ range .Alerts }}
 

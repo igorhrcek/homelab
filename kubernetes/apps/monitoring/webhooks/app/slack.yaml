@@ -13,7 +13,7 @@ spec:
     receiver: "slack-monitoring"
     continue: true
     matchers:
-      - "container!=metrics-server-nanny"
+      - "severity=warning|critical|info"
   receivers:
     - name: "slack-monitoring"
       slack_configs:

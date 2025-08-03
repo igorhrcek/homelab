@@ -20,6 +20,7 @@ spec:
       bdev_enable_discard = "true"
       bdev_async_discard = "true"
       osd_class_update_on_start = "false"
+      bdev_async_discard_threads: "1"
     cephClusterSpec:
       crashCollector:
         disable: false

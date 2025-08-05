@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
 - alertmanager-summary.yaml
 - ceph-cluster.yaml
+- dashboard-index.yaml
 - kubernetes-compute-namespace-pods.yaml
 - kubernetes-compute-namespace-workloads.yaml
 - kubernetes-compute-node-pods.yaml

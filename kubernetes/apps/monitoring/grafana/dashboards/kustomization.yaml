@@ -32,3 +32,4 @@ resources:
 - smartctl.yaml
 - victoriametrics-single.yaml
 - vmagent-summary.yaml
+- volsync-summary.yaml

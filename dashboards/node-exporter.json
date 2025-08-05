@@ -12381,10 +12381,7 @@
   "refresh": "1m",
   "schemaVersion": 41,
   "tags": [
-    "monitoring",
-    "node",
-    "exporter",
-    "summary"
+    "node"
   ],
   "templating": {
     "list": [
@@ -12404,6 +12401,10 @@
         "type": "datasource"
       },
       {
+        "current": {
+          "text": "10.40.0.101:9100",
+          "value": "10.40.0.101:9100"
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
@@ -12452,5 +12453,5 @@
   "timezone": "utc",
   "title": "Monitoring / Node Exporter / Summary",
   "uid": "monitoring-node-exporter-summary",
-  "version": 2
+  "version": 3
 }

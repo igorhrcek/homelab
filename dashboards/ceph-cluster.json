@@ -4961,7 +4961,7 @@
   "refresh": "1m",
   "schemaVersion": 41,
   "tags": [
-    "ceph-mixin"
+    "node"
   ],
   "templating": {
     "list": [
@@ -5070,6 +5070,6 @@
   "timezone": "utc",
   "title": "Ceph Cluster / Summary",
   "uid": "tbO9LAiZK",
-  "version": 11,
+  "version": 12,
   "weekStart": "monday"
 }

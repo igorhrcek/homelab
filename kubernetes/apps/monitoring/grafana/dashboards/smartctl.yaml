@@ -28,7 +28,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 27,
+      "id": 28,
       "links": [],
       "panels": [
         {
@@ -1312,7 +1312,8 @@ data:
       "refresh": "1m",
       "schemaVersion": 41,
       "tags": [
-        "monitoring"
+        "monitoring",
+        "node"
       ],
       "templating": {
         "list": [
@@ -1479,6 +1480,6 @@ data:
       "timezone": "utc",
       "title": "Smartctl / Summary",
       "uid": "smartctl-summary",
-      "version": 4,
+      "version": 1,
       "weekStart": "monday"
     }

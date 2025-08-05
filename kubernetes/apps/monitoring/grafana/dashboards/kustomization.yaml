@@ -28,6 +28,7 @@ resources:
 - kubernetes-views-pods.yaml
 - kubernetes-volume-performance.yaml
 - node-exporter.yaml
+- node-feature-discovery.yaml
 - smartctl.yaml
 - victoriametrics-single.yaml
 - vmagent-summary.yaml

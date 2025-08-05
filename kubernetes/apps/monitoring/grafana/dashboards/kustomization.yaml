@@ -27,6 +27,7 @@ resources:
 - kubernetes-views-nodes.yaml
 - kubernetes-views-pods.yaml
 - kubernetes-volume-performance.yaml
+- mysql-summary.yaml
 - node-exporter.yaml
 - node-feature-discovery.yaml
 - smartctl.yaml

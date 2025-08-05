@@ -7,3 +7,4 @@ resources:
   - ./victoriametrics/kustomization.yaml
   - ./grafana/kustomization.yaml
   - ./webhooks/kustomization.yaml
+  - ./smartctl-exporter/kustomization.yaml

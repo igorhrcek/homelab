@@ -12,6 +12,7 @@ resources:
 - kubernetes-storage-rules.yaml
 - kubernetes-system-rules.yaml
 - monitoring-blackbox-rules.yaml
+- smartctl-rules.yaml
 - victoriametrics-alertmanager-rules.yaml
 - victoriametrics-cluster-rules.yaml
 - victoriametrics-health-rules.yaml

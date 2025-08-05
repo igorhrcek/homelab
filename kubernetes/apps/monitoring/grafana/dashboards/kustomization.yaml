@@ -5,6 +5,7 @@ resources:
 - alertmanager-summary.yaml
 - ceph-cluster.yaml
 - ceph-osd.yaml
+- ceph-pools.yaml
 - dashboard-index.yaml
 - kubernetes-compute-namespace-pods.yaml
 - kubernetes-compute-namespace-workloads.yaml

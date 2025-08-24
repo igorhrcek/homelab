@@ -3,10 +3,10 @@
   extends: [
     'github>igorhrcek/renovate-config',
     'github>igorhrcek/renovate-config:automerge-github-actions',
-    'github>igorhrcek/home//.renovate/groups.json5',
-    'github>igorhrcek/home//.renovate/versioning.json5',
-    'github>igorhrcek/home//.renovate/autoMerge.json5',
-    'github>igorhrcek/home//.renovate/customManagers.json5',
+    'github>igorhrcek/homelab//.renovate/groups.json5',
+    'github>igorhrcek/homelab//.renovate/versioning.json5',
+    'github>igorhrcek/homelab//.renovate/autoMerge.json5',
+    'github>igorhrcek/homelab//.renovate/customManagers.json5',
   ],
   ignorePaths: [
     '.archive/**',

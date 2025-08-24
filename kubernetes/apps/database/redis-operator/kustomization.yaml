@@ -2,10 +2,10 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: redis-operator-deployment
+  name: redis-operator
   namespace: flux-system
 spec:
-  path: ./cluster/releases/redis-operator/deployment
+  path: ./kubernetes/apps/database/redis-operator/app
   prune: false
   sourceRef:
     kind: GitRepository
@@ -13,9 +13,6 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
-  dependsOn:
-    - name: redis-namespace
-    - name: redis-operator-chart
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease

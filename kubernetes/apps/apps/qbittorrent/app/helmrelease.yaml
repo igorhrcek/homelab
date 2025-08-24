@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: linuxserver/qbittorrent
-              tag: 5.1.2
+              tag: 20.04.1
             env:
               TZ: "Europe/Belgrade"
 

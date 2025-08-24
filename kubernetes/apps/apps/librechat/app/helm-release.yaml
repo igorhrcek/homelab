@@ -1,0 +1,283 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/heads/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name librechat
+  namespace: librechat
+
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  install:
+    timeout: 10m
+    replace: true
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 3
+
+  upgrade:
+    remediation:
+      remediateLastFailure: true
+      retries: 3
+      strategy: rollback
+    cleanupOnFail: true
+    crds: CreateReplace
+
+  test:
+    enable: true
+
+  rollback:
+    recreate: true
+    force: true
+    cleanupOnFail: true
+
+  uninstall:
+    keepHistory: false
+
+  maxHistory: 1
+
+  values:
+    controllers:
+      librechat:
+        type: deployment
+        replicas: 2
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+          secret.reloader.stakater.com/reload: &secret librechat-secret
+        containers:
+          app:
+            image:
+              repository: ghcr.io/danny-avila/lc-dev
+              tag: e8ddd279fd0a170469de554d67e647d1cc2474e3@sha256:efc9bbd2a981a909183016721ef4a615fdb692bb30b0ea9e5bee59fbdae61cb0
+            env: &env
+              ENDPOINTS: "agents,assistants,custom"
+              PORT: "3080"
+              RAG_PORT: "8080"
+              NODE_ENV: "development"
+              MEILI_HOST: "http://meilisearch.meilisearch.svc:7700"
+              OPENAI_API_KEY: user_provided
+
+              DOMAIN_CLIENT: https://chat.litehub.io
+              DOMAIN_SERVER: https://chat.litehub.io
+              SEARCH: "true"
+
+              ALLOW_EMAIL_LOGIN: "false"
+              ALLOW_REGISTRATION: "false"
+              ALLOW_SOCIAL_LOGIN: "true"
+              ALLOW_SOCIAL_REGISTRATION: "true"
+              ALLOW_PASSWORD_RESET: "false"
+              ALLOW_UNVERIFIED_EMAIL_LOGIN: "false"
+
+              SAML_CERT: &samlCertPath /app/saml.pem
+              SAML_CALLBACK_URL: /oauth/saml/callback
+
+              GOOGLE_CALLBACK_URL: /oauth/google/callback
+
+              USE_REDIS: true
+              REDIS_URI: redis://redis-librechat.redis.svc.cluster.local:6379
+
+              GA_MCP_GOOGLE_APPLICATION_CREDENTIALS: /var/run/ga/adc.json
+
+              # GCS Interoperability - uses GCS under the hood
+              AWS_ENDPOINT_URL: https://storage.googleapis.com
+              AWS_BUCKET_NAME: mailerlitehub-librechat-assets
+              AWS_REGION: auto
+
+              S3_URL_EXPIRY_SECONDS: 3600 # 1 hour
+
+              GOOGLE_SERVICE_KEY_FILE: /app/gcp-auth.json
+
+            dependsOn:
+              - ragapi
+
+            envFrom: &envFrom
+              - secretRef:
+                  name: *secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - "ALL"
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1000Mi
+            probes:
+              liveness: &librechatProbe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 3080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *librechatProbe
+          exporter:
+            image:
+              repository: ghcr.io/virtuos/librechat_exporter
+              tag: main
+            ports:
+              - name: metrics
+                containerPort: &metricsPort 8000
+            env:
+              - name: MONGODB_URI
+                valueFrom:
+                  secretKeyRef:
+                    name: *secret
+                    key: MONGO_URI
+              - name: LOGGING_LEVEL
+                value: info
+              - name: MONGODB_DATABASE
+                value: librechat
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+
+          ragapi:
+            image:
+              repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
+              tag: latest@sha256:42ef0aa9a8fa2437eed73648242e01a1c0dbec772dc0da891908e44adbce626a
+            envFrom: *envFrom
+            env: *env
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+            probes:
+              liveness: &ragapiProbe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *ragapiProbe
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+
+    service:
+      app:
+        controller: librechat
+        ports:
+          http:
+            port: &port 3080
+          metrics:
+            port: *metricsPort
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: librechat-config
+        advancedMounts:
+          librechat:
+            app:
+              - subPath: librechat.yaml
+                path: /app/librechat.yaml
+
+      saml:
+        enabled: true
+        type: secret
+        name: librechat-google-saml-cert
+        advancedMounts:
+          librechat:
+            app:
+              - subPath: saml.pem
+                path: /app/saml.pem
+
+      ga-mcp:
+        enabled: true
+        type: secret
+        name: google-analytics-mcp-creds
+        advancedMounts:
+          librechat:
+            app:
+              - subPath: auth.json
+                path: /var/run/ga/adc.json
+
+      vertexai:
+        enabled: true
+        type: secret
+        name: librechat-google-vertexai-creds
+        advancedMounts:
+          librechat:
+            app:
+              - subPath: auth.json
+                path: /app/gcp-auth.json
+
+      app-data:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          librechat:
+            app:
+              - path: /app/data
+              - path: /app/api/data
+
+      tmp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+      data:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          librechat:
+            app:
+              - subPath: logs
+                path: /app/api/logs
+              - subPath: images
+                path: /app/client/public/images
+              - subPath: uploads
+                path: /app/uploads
+            ragapi:
+              - subPath: ragapi
+                path: /app/uploads
+
+    serviceMonitor:
+      app:
+        serviceName: librechat
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 30s

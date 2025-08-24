@@ -1,0 +1,153 @@
+# For more information, see the Configuration Guide:
+# https://www.librechat.ai/docs/configuration/librechat_yaml
+
+# Configuration version (required)
+version: 1.2.8
+
+fileStrategy: "s3"
+
+# Custom interface configuration
+interface:
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: true
+  agentBuilder: true
+
+registration:
+  socialLogins:
+    - google
+
+ocr:
+  mistralModel: "mistral-ocr-2505"
+  strategy: "vertexai_mistral_ocr"
+
+# https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/mcp_servers
+mcpServers:
+  mailerlite:
+    type: "streamable-http"
+    initTimeout: 150000 # higher timeout to allow for initial authentication
+    url: "https://mcp.mailerlite.com/mcp"
+  mailersend:
+    type: "streamable-http"
+    initTimeout: 150000 # higher timeout to allow for initial authentication
+    url: "https://mcp.mailersend.com/mcp"
+  mailerlite-logs:
+    type: streamable-http
+    initTimeout: 150000
+    url: https://victorialogs-mcp.litesrv.io/mcp
+    serverInstructions: |
+      For relative windows ("last 15m", "last 1h", "today"):
+      - Call Time MCP to get current UTC time.
+      - Compute absolute start/end (Unix seconds).
+      - Use VM range tools with those values.
+  mailerlite-metrics:
+    type: streamable-http
+    initTimeout: 150000
+    url: https://victoriametrics-mcp.litesrv.io/mcp
+    serverInstructions: |
+      For relative windows ("last 15m", "last 1h", "today"):
+      - Call Time MCP to get current UTC time.
+      - Compute absolute start/end (Unix seconds).
+      - Use VM range tools with those values.
+  ml-classic-logs:
+    type: streamable-http
+    initTimeout: 150000
+    url: https://victorialogs-mcp.mlsrv.io/mcp
+    serverInstructions: |
+      For relative windows ("last 15m", "last 1h", "today"):
+      - Call Time MCP to get current UTC time.
+      - Compute absolute start/end (Unix seconds).
+      - Use VM range tools with those values.
+  ml-classic-metrics:
+    type: streamable-http
+    initTimeout: 150000
+    url: https://victoriametrics-mcp.mlsrv.io/mcp
+    serverInstructions: |
+      For relative windows ("last 15m", "last 1h", "today"):
+      - Call Time MCP to get current UTC time.
+      - Compute absolute start/end (Unix seconds).
+      - Use VM range tools with those values.
+  google-analytics-mcp:
+    type: stdio
+    command: uvx
+    args:
+      - --from
+      - https://github.com/googleanalytics/google-analytics-mcp/archive/refs/heads/main.zip
+      - google-analytics-mcp
+    chatMenu: true
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: "${GA_MCP_GOOGLE_APPLICATION_CREDENTIALS}"
+  time:
+    command: uvx
+    args: ["mcp-server-time", "--local-timezone=Etc/GMT"]
+    chatMenu: true
+  linear:
+    type: streamable-http
+    url: "https://mcp.linear.app/mcp"
+    serverInstructions: true
+    requiresOAuth: true
+  github:
+    type: http
+    url: "https://api.githubcopilot.com/mcp/"
+    headers:
+      Authorization: "{{PAT_TOKEN}}"
+    customUserVars:
+      PAT_TOKEN:
+        title: "GitHub PAT Token"
+        description: "GitHub Personal Access Token for GitHub Copilot MCP server"
+    startup: false
+  looker-mcp:
+    type: "streamable-http"
+    initTimeout: 150000
+    url: "http://looker-mcp.mcps.svc.cluster.local:5000/mcp"
+
+  intercom:
+    type: "streamable-http"
+    url: "https://mcp.intercom.com/mcp"
+    headers:
+      Authorization: "Bearer {{INTERCOM_API_KEY}}"
+    chatMenu: true
+    startup: false
+    customUserVars:
+      INTERCOM_API_KEY:
+        title: "Intercom API Key"
+        description: "Intercom API Key for Intercom MCP server"
+
+  posthog:
+    type: "streamable-http"
+    url: "https://mcp.posthog.com/mcp"
+    headers:
+      Authorization: "Bearer {{POSTHOG_AUTH_HEADER}}"
+    chatMenu: true
+    startup: false
+    customUserVars:
+      POSTHOG_AUTH_HEADER:
+        title: "Posthog API Key"
+        description: "Posthog API Key for Posthog MCP server"
+
+  context7:
+    type: "streamable-http"
+    url: "https://mcp.context7.com/mcp"
+
+endpoints:
+  custom:
+    - name: "LiteLLM"
+      apiKey: "${LITELLM_KEY}"
+      baseURL: "http://litellm:4000/v1"
+      models:
+        default: ["gemini-2.5-flash"]
+        fetch: true
+      titleConvo: true
+      titleModel: "gemini-2.5-flash-lite"
+      forcePrompt: false
+      modelDisplayLabel: "LiteLLM"
+      summarize: false
+      summaryModel: "gpt-5-mini"
+  agents:
+    disableBuilder: false

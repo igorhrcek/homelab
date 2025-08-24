@@ -59,7 +59,7 @@ spec:
           app:
             image:
               repository: ghcr.io/danny-avila/lc-dev
-              tag: e8ddd279fd0a170469de554d67e647d1cc2474e3@sha256:efc9bbd2a981a909183016721ef4a615fdb692bb30b0ea9e5bee59fbdae61cb0
+              tag: e8ddd279fd0a170469de554d67e647d1cc2474e3@sha256:2a95647f015563e46b74d9280405c2b68f4aabc49a4b4ead439d1c90c486cfac
             env: &env
               ENDPOINTS: "agents,assistants,custom"
               PORT: "3080"

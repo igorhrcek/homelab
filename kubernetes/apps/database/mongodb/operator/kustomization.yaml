@@ -5,7 +5,7 @@ metadata:
   name: mongodb-operator
   namespace: flux-system
 spec:
-  path: ./kubernetes/apps/database/mongodb-operator/app
+  path: ./kubernetes/apps/database/mongodb/operator/app
   prune: false
   sourceRef:
     kind: GitRepository
@@ -17,4 +17,4 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: mongodb-operator
-      namespace: mongodb
+      namespace: database

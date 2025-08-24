@@ -6,4 +6,4 @@ resources:
   - ./mariadb/kustomization.yaml
   - ./redis-operator/kustomization.yaml
   - ./redis/librechat/kustomization.yaml
-  - ./mongodb-operator/kustomization.yaml
+  - ./mongodb/operator/kustomization.yaml

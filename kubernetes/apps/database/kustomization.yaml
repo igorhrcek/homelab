@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./mariadb/kustomization.yaml
-  - ./redis-operator/kustomization.yaml
+  - ./redis/operator/kustomization.yaml
   - ./redis/librechat/kustomization.yaml
   - ./mongodb/operator/kustomization.yaml

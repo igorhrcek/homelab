@@ -10,3 +10,5 @@ resources:
   - ./openebs.yaml
   - ./node-feature-discovery.yaml
   - ./mariadb.yaml
+  - ./redis-operator.yaml
+  - ./redis-standalone.yaml

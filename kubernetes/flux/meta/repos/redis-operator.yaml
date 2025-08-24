@@ -1,0 +1,15 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: redis-operator-chart
+  namespace: flux-system
+spec:
+  interval: 30m
+  timeout: 60s
+  url: oci://ghcr.io/ot-container-kit/charts/redis-operator
+  ref:
+    tag: 0.21.2
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy

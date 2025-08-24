@@ -23,7 +23,7 @@ spec:
       govee2mqtt:
         replicas: 1
 
-        pod:
+        # pod:
           # annotations:
           #   k8s.v1.cni.cncf.io/networks: |
           #     [{

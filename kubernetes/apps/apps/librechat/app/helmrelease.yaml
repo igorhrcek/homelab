@@ -65,11 +65,7 @@ spec:
               PORT: "3080"
               RAG_PORT: "8080"
               NODE_ENV: "development"
-              MEILI_HOST: "http://meilisearch.meilisearch.svc:7700"
-              OPENAI_API_KEY: user_provided
 
-              DOMAIN_CLIENT: https://chat.litehub.io
-              DOMAIN_SERVER: https://chat.litehub.io
               SEARCH: "true"
 
               ALLOW_EMAIL_LOGIN: "false"
@@ -79,24 +75,10 @@ spec:
               ALLOW_PASSWORD_RESET: "false"
               ALLOW_UNVERIFIED_EMAIL_LOGIN: "false"
 
-              SAML_CERT: &samlCertPath /app/saml.pem
-              SAML_CALLBACK_URL: /oauth/saml/callback
-
-              GOOGLE_CALLBACK_URL: /oauth/google/callback
-
               USE_REDIS: true
-              REDIS_URI: redis://redis-librechat.redis.svc.cluster.local:6379
-
-              GA_MCP_GOOGLE_APPLICATION_CREDENTIALS: /var/run/ga/adc.json
-
-              # GCS Interoperability - uses GCS under the hood
-              AWS_ENDPOINT_URL: https://storage.googleapis.com
-              AWS_BUCKET_NAME: mailerlitehub-librechat-assets
-              AWS_REGION: auto
+              REDIS_URI: redis://redis-librechat.database.svc.cluster.local:6379
 
               S3_URL_EXPIRY_SECONDS: 3600 # 1 hour
-
-              GOOGLE_SERVICE_KEY_FILE: /app/gcp-auth.json
 
             dependsOn:
               - ragapi
@@ -210,36 +192,6 @@ spec:
             app:
               - subPath: librechat.yaml
                 path: /app/librechat.yaml
-
-      saml:
-        enabled: true
-        type: secret
-        name: librechat-google-saml-cert
-        advancedMounts:
-          librechat:
-            app:
-              - subPath: saml.pem
-                path: /app/saml.pem
-
-      ga-mcp:
-        enabled: true
-        type: secret
-        name: google-analytics-mcp-creds
-        advancedMounts:
-          librechat:
-            app:
-              - subPath: auth.json
-                path: /var/run/ga/adc.json
-
-      vertexai:
-        enabled: true
-        type: secret
-        name: librechat-google-vertexai-creds
-        advancedMounts:
-          librechat:
-            app:
-              - subPath: auth.json
-                path: /app/gcp-auth.json
 
       app-data:
         enabled: true

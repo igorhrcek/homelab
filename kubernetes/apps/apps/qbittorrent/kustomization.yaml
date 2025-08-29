@@ -25,5 +25,3 @@ spec:
       APP: *app
       VOLSYNC_CLAIM: qbittorrent-config
       VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_STORAGECLASS: ceph-filesystem
-      VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem

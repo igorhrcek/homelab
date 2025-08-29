@@ -23,5 +23,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      # VOLSYNC_CLAIM: qbittorrent-config
-      # VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_CLAIM: qbittorrent-config
+      VOLSYNC_CAPACITY: 5Gi

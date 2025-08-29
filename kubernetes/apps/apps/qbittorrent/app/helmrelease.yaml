@@ -55,8 +55,8 @@ spec:
                 port: *port
 
     persistence:
-      # config:
-      #   existingClaim: qbittorrent-config
+      config:
+        existingClaim: qbittorrent-config
       media:
         enabled: true
         type: custom

@@ -15,3 +15,4 @@ resources:
   - ./plex/kustomization.yaml
   - ./invoiceninja/kustomization.yaml
   - ./librechat/kustomization.yaml
+  - ./meilisearch/kustomization.yaml

@@ -12,3 +12,4 @@ resources:
   - ./mariadb.yaml
   - ./redis-operator.yaml
   - ./redis-standalone.yaml
+  - ./meilisearch.yaml

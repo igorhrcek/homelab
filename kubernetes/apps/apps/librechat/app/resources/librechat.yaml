@@ -25,10 +25,9 @@ endpoints:
       apiKey: "${OPENROUTER_KEY}"
       baseURL: "https://openrouter.ai/api/v1"
       models:
-        default: ["meta-llama/llama-3-70b-instruct"]
+        default: ["gemini-2.5-flash"]
         fetch: true
       titleConvo: true
-      titleModel: "meta-llama/llama-3-70b-instruct"
-      # Recommended: Drop the stop parameter from the request as Openrouter models use a variety of stop tokens.
+      titleModel: "gemini-2.5-flash-lite"
       dropParams: ["stop"]
       modelDisplayLabel: "OpenRouter"

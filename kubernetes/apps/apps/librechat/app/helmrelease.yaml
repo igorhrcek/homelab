@@ -63,7 +63,6 @@ spec:
             env: &env
               ENDPOINTS: "agents,assistants,custom"
               PORT: "3080"
-              RAG_PORT: "8080"
               NODE_ENV: "development"
               SEARCH: "true"
               ALLOW_EMAIL_LOGIN: "true"

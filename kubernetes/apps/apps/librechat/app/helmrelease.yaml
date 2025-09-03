@@ -75,6 +75,10 @@ spec:
               REDIS_URI: redis://redis-librechat.database.svc.cluster.local:6379
               S3_URL_EXPIRY_SECONDS: 3600
               AWS_REGION: auto
+              AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+              AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+              AWS_ENDPOINT_URL: "${AWS_ENDPOINT_URL}"
+              AWS_BUCKET_NAME: "${AWS_BUCKET_NAME}"
               MEILI_HOST: "http://meilisearch.apps.svc.cluster.local:7700"
 
             envFrom: &envFrom

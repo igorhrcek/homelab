@@ -16,8 +16,8 @@ interface:
   prompts: true
   bookmarks: true
   multiConvo: true
-  agents: false
-  agentBuilder: false
+  agents: true
+  agentBuilder: true
 
 endpoints:
   custom:

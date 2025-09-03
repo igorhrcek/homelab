@@ -6,18 +6,6 @@ version: 1.2.8
 
 fileStrategy: "s3"
 
-# Custom interface configuration
-interface:
-  endpointsMenu: true
-  modelSelect: true
-  parameters: true
-  sidePanel: true
-  presets: true
-  prompts: true
-  bookmarks: true
-  multiConvo: true
-  agents: true
-  agentBuilder: true
 
 endpoints:
   custom:

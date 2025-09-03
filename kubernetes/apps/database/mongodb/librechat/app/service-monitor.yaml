@@ -4,7 +4,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: &app mongodb
-  namespace: mongodb
+  namespace: database
 spec:
   endpoints:
     - basicAuth:

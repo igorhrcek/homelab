@@ -6,11 +6,11 @@ metadata:
   name: &app librechat
   namespace: flux-system
 spec:
-  targetNamespace: librechat
+  targetNamespace: apps
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/apps/librechat/deployment
+  path: ./kubernetes/apps/apps/librechat/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -23,8 +23,8 @@ spec:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: librechat
-      namespace: librechat
+      namespace: apps
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
-      name: librechat
-      namespace: librechat
+      name: librechat-secret
+      namespace: apps

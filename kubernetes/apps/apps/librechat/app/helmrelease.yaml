@@ -4,7 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &name librechat
-  namespace: librechat
+  namespace: apps
 
 spec:
   interval: 30m
@@ -65,23 +65,16 @@ spec:
               PORT: "3080"
               RAG_PORT: "8080"
               NODE_ENV: "development"
-
               SEARCH: "true"
-
-              ALLOW_EMAIL_LOGIN: "false"
-              ALLOW_REGISTRATION: "false"
-              ALLOW_SOCIAL_LOGIN: "true"
-              ALLOW_SOCIAL_REGISTRATION: "true"
+              ALLOW_EMAIL_LOGIN: "true"
+              ALLOW_REGISTRATION: "true"
+              ALLOW_SOCIAL_LOGIN: "false"
+              ALLOW_SOCIAL_REGISTRATION: "false"
               ALLOW_PASSWORD_RESET: "false"
               ALLOW_UNVERIFIED_EMAIL_LOGIN: "false"
-
               USE_REDIS: true
               REDIS_URI: redis://redis-librechat.database.svc.cluster.local:6379
-
-              S3_URL_EXPIRY_SECONDS: 3600 # 1 hour
-
-            dependsOn:
-              - ragapi
+              S3_URL_EXPIRY_SECONDS: 3600
 
             envFrom: &envFrom
               - secretRef:
@@ -136,32 +129,6 @@ spec:
               capabilities:
                 drop:
                   - "ALL"
-
-          ragapi:
-            image:
-              repository: ghcr.io/danny-avila/librechat-rag-api-dev-lite
-              tag: latest@sha256:86a9b2202f740c1e737b4587de28faa81a131c4c616f832259bcea77096dd6a0
-            envFrom: *envFrom
-            env: *env
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - "ALL"
-            probes:
-              liveness: &ragapiProbe
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /health
-                    port: 8080
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *ragapiProbe
 
     defaultPodOptions:
       securityContext:
@@ -233,3 +200,16 @@ spec:
             path: /metrics
             interval: 1m
             scrapeTimeout: 30s
+
+    route:
+      app:
+        hostnames:
+          - ai.hrcek.rs
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port

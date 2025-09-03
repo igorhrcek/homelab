@@ -14,3 +14,4 @@ resources:
   - ./qbittorrent/kustomization.yaml
   - ./plex/kustomization.yaml
   - ./invoiceninja/kustomization.yaml
+  - ./librechat/kustomization.yaml

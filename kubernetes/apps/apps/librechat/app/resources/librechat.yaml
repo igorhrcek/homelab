@@ -3,9 +3,21 @@
 
 # Configuration version (required)
 version: 1.2.8
+cache: true
 
 fileStrategy: "s3"
 
+interface:
+  endpointsMenu: true
+  modelSelect: true
+  parameters: true
+  sidePanel: true
+  presets: true
+  prompts: true
+  bookmarks: true
+  multiConvo: true
+  agents: false
+  agentBuilder: false
 
 endpoints:
   custom:

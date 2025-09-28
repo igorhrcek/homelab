@@ -102,7 +102,7 @@ nodes:
   - hostname: "edge003"
     ipAddress: "10.40.0.103"
     installDiskSelector:
-      model: "Lexar SSD NQ100"
+      model: "VK0300GDUQV"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/a055aa98eeb22e82c687d26476d743131ca2c626916ea99616efd2c1fd7a5300

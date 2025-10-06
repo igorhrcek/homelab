@@ -12,7 +12,7 @@ resources:
   - ./radarr/kustomization.yaml
   - ./sonarr/kustomization.yaml
   - ./qbittorrent/kustomization.yaml
-  - ./plex/kustomization.yaml
+  # - ./plex/kustomization.yaml
   - ./invoiceninja/kustomization.yaml
   - ./librechat/kustomization.yaml
   - ./meilisearch/kustomization.yaml

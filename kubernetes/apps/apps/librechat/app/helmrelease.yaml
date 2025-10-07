@@ -59,7 +59,7 @@ spec:
           app:
             image:
               repository: ghcr.io/danny-avila/librechat
-              tag: v0.8.0
+              tag: v0.7.9
             env: &env
               ENDPOINTS: "agents,assistants,custom"
               PORT: "3080"

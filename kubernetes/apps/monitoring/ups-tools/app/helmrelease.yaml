@@ -69,7 +69,7 @@ spec:
             readOnly: true
       usb:
         type: hostPath
-        hostPath: /dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller_AECJb11A922-if00-port0
+        hostPath: /dev/serial/by-id/usb-FTDI_FT231X_USB_UART_D30BRKFZ-if00-port0
         # hostPathType: CharDevice
         globalMounts:
           - path: /dev/ttyUSB1

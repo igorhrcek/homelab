@@ -53,8 +53,8 @@ spec:
         controller: network-ups-tools
         type: LoadBalancer
         externalTrafficPolicy: Cluster
-        # annotations:
-        #   lbipam.cilium.io/ips: "10.40.0.16"
+        annotations:
+          lbipam.cilium.io/ips: "10.40.0.14"
         ports:
           http:
             port: 3493

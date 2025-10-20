@@ -31,6 +31,7 @@ resources:
 - node-exporter.yaml
 - node-feature-discovery.yaml
 - smartctl.yaml
+- ups-summary.yaml
 - victoriametrics-single.yaml
 - vmagent-summary.yaml
 - volsync-summary.yaml

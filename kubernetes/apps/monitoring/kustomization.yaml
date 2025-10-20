@@ -8,3 +8,4 @@ resources:
   - ./grafana/kustomization.yaml
   - ./webhooks/kustomization.yaml
   - ./smartctl-exporter/kustomization.yaml
+  - ./ups-tools/kustomization.yaml

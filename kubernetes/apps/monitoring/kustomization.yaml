@@ -9,3 +9,4 @@ resources:
   - ./webhooks/kustomization.yaml
   - ./smartctl-exporter/kustomization.yaml
   - ./ups-tools/kustomization.yaml
+  - ./nut-exporter/kustomization.yaml

@@ -72,4 +72,4 @@ spec:
         hostPath: /dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller_AECJb11A922-if00-port0
         # hostPathType: CharDevice
         globalMounts:
-          - path: /dev/ttyUSB0
+          - path: /dev/ttyUSB1

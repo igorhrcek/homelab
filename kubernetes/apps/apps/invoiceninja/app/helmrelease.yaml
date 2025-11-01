@@ -73,7 +73,7 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 10Gi
-        storageClass: openebs-hostpath
+        storageClass: ceph-block
         advancedMounts:
           invoiceninja:
             app:
@@ -87,7 +87,7 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 10Gi
-        storageClass: openebs-hostpath
+        storageClass: ceph-block
         advancedMounts:
           invoiceninja:
             app:

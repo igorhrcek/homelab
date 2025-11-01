@@ -5,5 +5,5 @@ resources:
   - ./namespace.yaml
   - ./vernemq/kustomization.yaml
   - ./zigbee2mqtt/kustomization.yaml
-  # - ./homeassistant/kustomization.yaml
+  - ./homeassistant/kustomization.yaml
   - ./govee2mqtt/kustomization.yaml

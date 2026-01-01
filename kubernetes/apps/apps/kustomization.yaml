@@ -16,4 +16,4 @@ resources:
   - ./invoiceninja/kustomization.yaml
   - ./librechat/kustomization.yaml
   - ./meilisearch/kustomization.yaml
-  # - ./sabnzbd/kustomization.yaml
+  - ./sabnzbd/kustomization.yaml

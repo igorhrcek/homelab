@@ -48,9 +48,8 @@ spec:
         containers:
           app:
             image:
-              # renovate: registryUrl=https://github.com/home-assistant/home-assistant/tags
               repository: homeassistant/home-assistant
-              tag: 2025.7.0.dev202506200239
+              tag: 2025.12
             env:
               TZ: "Europe/Belgrade"
             envFrom:
@@ -66,9 +65,8 @@ spec:
 
           code-server:
             image:
-              # renovate: registryUrl=https://github.com/coder/code-server/tags
               repository: ghcr.io/coder/code-server
-              tag: 4.107.0@sha256:4b622c4cd1b0f559fec0df67fcf09042d63e9ce84c575102066afd9511695627
+              tag: 4.107.0-39
             args:
               - --auth
               - none

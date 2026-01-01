@@ -35,10 +35,10 @@ spec:
               SABNZBD__PORT: &port 8080
               SABNZBD__HOST_WHITELIST_ENTRIES: >-
                 sabnzbd,
-                sabnzbd.media,
-                sabnzbd.media.svc,
-                sabnzbd.media.svc.cluster,
-                sabnzbd.media.svc.cluster.local,
+                sabnzbd.apps,
+                sabnzbd.apps.svc,
+                sabnzbd.apps.svc.cluster,
+                sabnzbd.apps.svc.cluster.local,
                 sabnzbd.hrcek.rs
             probes:
               liveness: &probes

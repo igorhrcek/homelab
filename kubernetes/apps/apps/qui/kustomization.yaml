@@ -10,9 +10,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: rook-ceph-cluster
-    - name: external-secrets-stores
   path: ./kubernetes/apps/apps/qui/app
   prune: true
   sourceRef:

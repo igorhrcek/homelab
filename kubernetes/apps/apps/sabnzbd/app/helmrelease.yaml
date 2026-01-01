@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/sabnzbd
-              tag: 4.4.1@sha256:4c91e35b625855ad306d6b3274229a22a1b97c96b3a985e169162c94dabfc5f5
+              tag: 4.4.1
 
             env:
               TZ: "Europe/Belgrade"

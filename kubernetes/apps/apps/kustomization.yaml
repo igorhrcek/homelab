@@ -17,3 +17,4 @@ resources:
   - ./librechat/kustomization.yaml
   - ./meilisearch/kustomization.yaml
   - ./sabnzbd/kustomization.yaml
+  - ./qui/kustomization.yaml

@@ -11,7 +11,7 @@ spec:
         kind: HelmRepository
         name: mariadb
         namespace: flux-system
-      version: 25.10.3
+      version: 25.10.4
   interval: 1h0m0s
   values:
     crds:

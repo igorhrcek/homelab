@@ -5,10 +5,10 @@ clusterName: kubernetes
 talosVersion: "${talosVersion}"
 kubernetesVersion: "${kubernetesVersion}"
 
-endpoint: https://10.40.0.20:6443
+endpoint: https://10.40.0.2:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
-  - &talosControlplaneVip "10.40.0.20"
+  - &talosControlplaneVip "10.40.0.2"
 additionalMachineCertSans: *sans
 
 clusterPodNets: ["10.42.0.0/16"]
@@ -102,7 +102,7 @@ nodes:
   - hostname: "edge003"
     ipAddress: "10.40.0.103"
     installDiskSelector:
-      model: "Samsung SSD 870"
+      model: "VK0300GDUQV"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/a055aa98eeb22e82c687d26476d743131ca2c626916ea99616efd2c1fd7a5300

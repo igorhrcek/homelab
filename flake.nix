@@ -31,7 +31,7 @@
             kustomize
             minijinja
             moreutils
-            pre-commit
+            # pre-commit
             sops
             stern
             talosctl
